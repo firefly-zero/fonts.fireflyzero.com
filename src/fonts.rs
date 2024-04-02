@@ -1,0 +1,163 @@
+use embedded_graphics::mono_font::*;
+
+// TODO: replace copy-pasting with macros, maybe?
+
+static ASCII: &[MonoFont] = &[
+    ascii::FONT_4X6,
+    ascii::FONT_5X7,
+    ascii::FONT_5X8,
+    ascii::FONT_6X9,
+    ascii::FONT_6X10,
+    ascii::FONT_6X12,
+    ascii::FONT_6X13,
+    ascii::FONT_6X13_BOLD,
+    ascii::FONT_6X13_ITALIC,
+    ascii::FONT_7X13,
+    ascii::FONT_7X13_BOLD,
+    ascii::FONT_7X13_ITALIC,
+    ascii::FONT_7X14,
+    ascii::FONT_7X14_BOLD,
+    ascii::FONT_8X13,
+    ascii::FONT_8X13_BOLD,
+    ascii::FONT_8X13_ITALIC,
+    ascii::FONT_9X15,
+    ascii::FONT_9X15_BOLD,
+    ascii::FONT_9X18,
+    ascii::FONT_9X18_BOLD,
+    ascii::FONT_10X20,
+];
+
+static ISO_1: &[MonoFont] = &[
+    iso_8859_1::FONT_4X6,
+    iso_8859_1::FONT_5X7,
+    iso_8859_1::FONT_5X8,
+    iso_8859_1::FONT_6X9,
+    iso_8859_1::FONT_6X10,
+    iso_8859_1::FONT_6X12,
+    iso_8859_1::FONT_6X13,
+    iso_8859_1::FONT_6X13_BOLD,
+    iso_8859_1::FONT_6X13_ITALIC,
+    iso_8859_1::FONT_7X13,
+    iso_8859_1::FONT_7X13_BOLD,
+    iso_8859_1::FONT_7X13_ITALIC,
+    iso_8859_1::FONT_7X14,
+    iso_8859_1::FONT_7X14_BOLD,
+    iso_8859_1::FONT_8X13,
+    iso_8859_1::FONT_8X13_BOLD,
+    iso_8859_1::FONT_8X13_ITALIC,
+    iso_8859_1::FONT_9X15,
+    iso_8859_1::FONT_9X15_BOLD,
+    iso_8859_1::FONT_9X18,
+    iso_8859_1::FONT_9X18_BOLD,
+    iso_8859_1::FONT_10X20,
+];
+
+static ISO_2: &[MonoFont] = &[
+    iso_8859_2::FONT_4X6,
+    iso_8859_2::FONT_5X7,
+    iso_8859_2::FONT_5X8,
+    iso_8859_2::FONT_6X9,
+    iso_8859_2::FONT_6X10,
+    iso_8859_2::FONT_6X12,
+    iso_8859_2::FONT_6X13,
+    iso_8859_2::FONT_6X13_BOLD,
+    iso_8859_2::FONT_6X13_ITALIC,
+    iso_8859_2::FONT_7X13,
+    iso_8859_2::FONT_7X13_BOLD,
+    iso_8859_2::FONT_7X13_ITALIC,
+    iso_8859_2::FONT_7X14,
+    iso_8859_2::FONT_7X14_BOLD,
+    iso_8859_2::FONT_8X13,
+    iso_8859_2::FONT_8X13_BOLD,
+    iso_8859_2::FONT_8X13_ITALIC,
+    iso_8859_2::FONT_9X15,
+    iso_8859_2::FONT_9X15_BOLD,
+    iso_8859_2::FONT_9X18,
+    iso_8859_2::FONT_9X18_BOLD,
+    iso_8859_2::FONT_10X20,
+];
+
+static ISO_3: &[MonoFont] = &[
+    iso_8859_3::FONT_4X6,
+    iso_8859_3::FONT_5X7,
+    iso_8859_3::FONT_5X8,
+    iso_8859_3::FONT_6X9,
+    iso_8859_3::FONT_6X10,
+    iso_8859_3::FONT_6X12,
+    iso_8859_3::FONT_6X13,
+    iso_8859_3::FONT_6X13_BOLD,
+    iso_8859_3::FONT_6X13_ITALIC,
+    iso_8859_3::FONT_7X13,
+    iso_8859_3::FONT_7X13_BOLD,
+    iso_8859_3::FONT_7X13_ITALIC,
+    iso_8859_3::FONT_7X14,
+    iso_8859_3::FONT_7X14_BOLD,
+    iso_8859_3::FONT_8X13,
+    iso_8859_3::FONT_8X13_BOLD,
+    iso_8859_3::FONT_8X13_ITALIC,
+    iso_8859_3::FONT_9X15,
+    iso_8859_3::FONT_9X15_BOLD,
+    iso_8859_3::FONT_9X18,
+    iso_8859_3::FONT_9X18_BOLD,
+    iso_8859_3::FONT_10X20,
+];
+
+static ISO_4: &[MonoFont] = &[
+    iso_8859_4::FONT_4X6,
+    iso_8859_4::FONT_5X7,
+    iso_8859_4::FONT_5X8,
+    iso_8859_4::FONT_6X9,
+    iso_8859_4::FONT_6X10,
+    iso_8859_4::FONT_6X12,
+    iso_8859_4::FONT_6X13,
+    iso_8859_4::FONT_6X13_BOLD,
+    iso_8859_4::FONT_6X13_ITALIC,
+    iso_8859_4::FONT_7X13,
+    iso_8859_4::FONT_7X13_BOLD,
+    iso_8859_4::FONT_7X13_ITALIC,
+    iso_8859_4::FONT_7X14,
+    iso_8859_4::FONT_7X14_BOLD,
+    iso_8859_4::FONT_8X13,
+    iso_8859_4::FONT_8X13_BOLD,
+    iso_8859_4::FONT_8X13_ITALIC,
+    iso_8859_4::FONT_9X15,
+    iso_8859_4::FONT_9X15_BOLD,
+    iso_8859_4::FONT_9X18,
+    iso_8859_4::FONT_9X18_BOLD,
+    iso_8859_4::FONT_10X20,
+];
+
+static ISO_5: &[MonoFont] = &[
+    iso_8859_5::FONT_4X6,
+    iso_8859_5::FONT_5X7,
+    iso_8859_5::FONT_5X8,
+    iso_8859_5::FONT_6X9,
+    iso_8859_5::FONT_6X10,
+    iso_8859_5::FONT_6X12,
+    iso_8859_5::FONT_6X13,
+    iso_8859_5::FONT_6X13_BOLD,
+    iso_8859_5::FONT_6X13_ITALIC,
+    iso_8859_5::FONT_7X13,
+    iso_8859_5::FONT_7X13_BOLD,
+    iso_8859_5::FONT_7X13_ITALIC,
+    iso_8859_5::FONT_7X14,
+    iso_8859_5::FONT_7X14_BOLD,
+    iso_8859_5::FONT_8X13,
+    iso_8859_5::FONT_8X13_BOLD,
+    iso_8859_5::FONT_8X13_ITALIC,
+    iso_8859_5::FONT_9X15,
+    iso_8859_5::FONT_9X15_BOLD,
+    iso_8859_5::FONT_9X18,
+    iso_8859_5::FONT_9X18_BOLD,
+    iso_8859_5::FONT_10X20,
+];
+
+// IMPORTANT: Preserve the order!
+pub(crate) static FONTS: &[(&str, &[MonoFont])] = &[
+    ("ascii", ASCII),      // ASCII
+    ("iso_8859_1", ISO_1), // Latin-1, Western European.
+    ("iso_8859_2", ISO_2), // Latin-2, Central European.
+    ("iso_8859_3", ISO_3), // Latin-3, South European.
+    ("iso_8859_4", ISO_4), // Latin-4, North European.
+    ("iso_8859_5", ISO_5), // Latin/Cyrillic.
+];
