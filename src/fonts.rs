@@ -152,12 +152,204 @@ static ISO_5: &[MonoFont] = &[
     iso_8859_5::FONT_10X20,
 ];
 
+static ISO_7: &[MonoFont] = &[
+    iso_8859_7::FONT_4X6,
+    iso_8859_7::FONT_5X7,
+    iso_8859_7::FONT_5X8,
+    iso_8859_7::FONT_6X9,
+    iso_8859_7::FONT_6X10,
+    iso_8859_7::FONT_6X12,
+    iso_8859_7::FONT_6X13,
+    iso_8859_7::FONT_6X13_BOLD,
+    iso_8859_7::FONT_6X13_ITALIC,
+    iso_8859_7::FONT_7X13,
+    iso_8859_7::FONT_7X13_BOLD,
+    iso_8859_7::FONT_7X13_ITALIC,
+    iso_8859_7::FONT_7X14,
+    iso_8859_7::FONT_7X14_BOLD,
+    iso_8859_7::FONT_8X13,
+    iso_8859_7::FONT_8X13_BOLD,
+    iso_8859_7::FONT_8X13_ITALIC,
+    iso_8859_7::FONT_9X15,
+    iso_8859_7::FONT_9X15_BOLD,
+    iso_8859_7::FONT_9X18,
+    iso_8859_7::FONT_9X18_BOLD,
+    iso_8859_7::FONT_10X20,
+];
+
+static ISO_9: &[MonoFont] = &[
+    iso_8859_9::FONT_4X6,
+    iso_8859_9::FONT_5X7,
+    iso_8859_9::FONT_5X8,
+    iso_8859_9::FONT_6X9,
+    iso_8859_9::FONT_6X10,
+    iso_8859_9::FONT_6X12,
+    iso_8859_9::FONT_6X13,
+    iso_8859_9::FONT_6X13_BOLD,
+    iso_8859_9::FONT_6X13_ITALIC,
+    iso_8859_9::FONT_7X13,
+    iso_8859_9::FONT_7X13_BOLD,
+    iso_8859_9::FONT_7X13_ITALIC,
+    iso_8859_9::FONT_7X14,
+    iso_8859_9::FONT_7X14_BOLD,
+    iso_8859_9::FONT_8X13,
+    iso_8859_9::FONT_8X13_BOLD,
+    iso_8859_9::FONT_8X13_ITALIC,
+    iso_8859_9::FONT_9X15,
+    iso_8859_9::FONT_9X15_BOLD,
+    iso_8859_9::FONT_9X18,
+    iso_8859_9::FONT_9X18_BOLD,
+    iso_8859_9::FONT_10X20,
+];
+
+static ISO_10: &[MonoFont] = &[
+    iso_8859_10::FONT_4X6,
+    iso_8859_10::FONT_5X7,
+    iso_8859_10::FONT_5X8,
+    iso_8859_10::FONT_6X9,
+    iso_8859_10::FONT_6X10,
+    iso_8859_10::FONT_6X12,
+    iso_8859_10::FONT_6X13,
+    iso_8859_10::FONT_6X13_BOLD,
+    iso_8859_10::FONT_6X13_ITALIC,
+    iso_8859_10::FONT_7X13,
+    iso_8859_10::FONT_7X13_BOLD,
+    iso_8859_10::FONT_7X13_ITALIC,
+    iso_8859_10::FONT_7X14,
+    iso_8859_10::FONT_7X14_BOLD,
+    iso_8859_10::FONT_8X13,
+    iso_8859_10::FONT_8X13_BOLD,
+    iso_8859_10::FONT_8X13_ITALIC,
+    iso_8859_10::FONT_9X15,
+    iso_8859_10::FONT_9X15_BOLD,
+    iso_8859_10::FONT_9X18,
+    iso_8859_10::FONT_9X18_BOLD,
+    iso_8859_10::FONT_10X20,
+];
+
+static ISO_13: &[MonoFont] = &[
+    iso_8859_13::FONT_4X6,
+    iso_8859_13::FONT_5X7,
+    iso_8859_13::FONT_5X8,
+    iso_8859_13::FONT_6X9,
+    iso_8859_13::FONT_6X10,
+    iso_8859_13::FONT_6X12,
+    iso_8859_13::FONT_6X13,
+    iso_8859_13::FONT_6X13_BOLD,
+    iso_8859_13::FONT_6X13_ITALIC,
+    iso_8859_13::FONT_7X13,
+    iso_8859_13::FONT_7X13_BOLD,
+    iso_8859_13::FONT_7X13_ITALIC,
+    iso_8859_13::FONT_7X14,
+    iso_8859_13::FONT_7X14_BOLD,
+    iso_8859_13::FONT_8X13,
+    iso_8859_13::FONT_8X13_BOLD,
+    iso_8859_13::FONT_8X13_ITALIC,
+    iso_8859_13::FONT_9X15,
+    iso_8859_13::FONT_9X15_BOLD,
+    iso_8859_13::FONT_9X18,
+    iso_8859_13::FONT_9X18_BOLD,
+    iso_8859_13::FONT_10X20,
+];
+
+static ISO_14: &[MonoFont] = &[
+    iso_8859_14::FONT_4X6,
+    iso_8859_14::FONT_5X7,
+    iso_8859_14::FONT_5X8,
+    iso_8859_14::FONT_6X9,
+    iso_8859_14::FONT_6X10,
+    iso_8859_14::FONT_6X12,
+    iso_8859_14::FONT_6X13,
+    iso_8859_14::FONT_6X13_BOLD,
+    iso_8859_14::FONT_6X13_ITALIC,
+    iso_8859_14::FONT_7X13,
+    iso_8859_14::FONT_7X13_BOLD,
+    iso_8859_14::FONT_7X13_ITALIC,
+    iso_8859_14::FONT_7X14,
+    iso_8859_14::FONT_7X14_BOLD,
+    iso_8859_14::FONT_8X13,
+    iso_8859_14::FONT_8X13_BOLD,
+    iso_8859_14::FONT_8X13_ITALIC,
+    iso_8859_14::FONT_9X15,
+    iso_8859_14::FONT_9X15_BOLD,
+    iso_8859_14::FONT_9X18,
+    iso_8859_14::FONT_9X18_BOLD,
+    iso_8859_14::FONT_10X20,
+];
+
+static ISO_15: &[MonoFont] = &[
+    iso_8859_15::FONT_4X6,
+    iso_8859_15::FONT_5X7,
+    iso_8859_15::FONT_5X8,
+    iso_8859_15::FONT_6X9,
+    iso_8859_15::FONT_6X10,
+    iso_8859_15::FONT_6X12,
+    iso_8859_15::FONT_6X13,
+    iso_8859_15::FONT_6X13_BOLD,
+    iso_8859_15::FONT_6X13_ITALIC,
+    iso_8859_15::FONT_7X13,
+    iso_8859_15::FONT_7X13_BOLD,
+    iso_8859_15::FONT_7X13_ITALIC,
+    iso_8859_15::FONT_7X14,
+    iso_8859_15::FONT_7X14_BOLD,
+    iso_8859_15::FONT_8X13,
+    iso_8859_15::FONT_8X13_BOLD,
+    iso_8859_15::FONT_8X13_ITALIC,
+    iso_8859_15::FONT_9X15,
+    iso_8859_15::FONT_9X15_BOLD,
+    iso_8859_15::FONT_9X18,
+    iso_8859_15::FONT_9X18_BOLD,
+    iso_8859_15::FONT_10X20,
+];
+
+static ISO_16: &[MonoFont] = &[
+    iso_8859_16::FONT_4X6,
+    iso_8859_16::FONT_5X7,
+    iso_8859_16::FONT_5X8,
+    iso_8859_16::FONT_6X9,
+    iso_8859_16::FONT_6X10,
+    iso_8859_16::FONT_6X12,
+    iso_8859_16::FONT_6X13,
+    iso_8859_16::FONT_6X13_BOLD,
+    iso_8859_16::FONT_6X13_ITALIC,
+    iso_8859_16::FONT_7X13,
+    iso_8859_16::FONT_7X13_BOLD,
+    iso_8859_16::FONT_7X13_ITALIC,
+    iso_8859_16::FONT_7X14,
+    iso_8859_16::FONT_7X14_BOLD,
+    iso_8859_16::FONT_8X13,
+    iso_8859_16::FONT_8X13_BOLD,
+    iso_8859_16::FONT_8X13_ITALIC,
+    iso_8859_16::FONT_9X15,
+    iso_8859_16::FONT_9X15_BOLD,
+    iso_8859_16::FONT_9X18,
+    iso_8859_16::FONT_9X18_BOLD,
+    iso_8859_16::FONT_10X20,
+];
+
+static JISX: &[MonoFont] = &[
+    jis_x0201::FONT_6X13,
+    jis_x0201::FONT_7X14,
+    jis_x0201::FONT_8X13,
+    jis_x0201::FONT_9X15,
+    jis_x0201::FONT_9X18,
+    jis_x0201::FONT_10X20,
+];
+
 // IMPORTANT: Preserve the order!
 pub(crate) static FONTS: &[(&str, &[MonoFont])] = &[
-    ("ascii", ASCII),      // ASCII
-    ("iso_8859_1", ISO_1), // Latin-1, Western European.
-    ("iso_8859_2", ISO_2), // Latin-2, Central European.
-    ("iso_8859_3", ISO_3), // Latin-3, South European.
-    ("iso_8859_4", ISO_4), // Latin-4, North European.
-    ("iso_8859_5", ISO_5), // Latin/Cyrillic.
+    ("ascii", ASCII),        // 0. ASCII
+    ("iso_8859_1", ISO_1),   // 1. Latin-1, Western European.
+    ("iso_8859_2", ISO_2),   // 2. Latin-2, Central European.
+    ("iso_8859_3", ISO_3),   // 3. Latin-3, South European.
+    ("iso_8859_4", ISO_4),   // 4. Latin-4, North European.
+    ("iso_8859_9", ISO_9),   // 5. Latin-5, Turkish.
+    ("iso_8859_10", ISO_10), // 6. Latin-6, Nordic.
+    ("iso_8859_13", ISO_13), // 7. Latin-7, Baltic Rim.
+    ("iso_8859_14", ISO_14), // 8. Latin-8, Celtic.
+    ("iso_8859_15", ISO_15), // 9. Latin-9 (revised Latin-1).
+    ("iso_8859_16", ISO_16), // A. Latin-10: South-East European.
+    ("iso_8859_5", ISO_5),   // B. Latin/Cyrillic.
+    ("iso_8859_7", ISO_7),   // C. Latin/Greek.
+    ("jis_x0201", JISX),     // D. Japanese katakana (halfwidth).
 ];
