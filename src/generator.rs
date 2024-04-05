@@ -8,7 +8,8 @@ use std::fs::File;
 use std::io::{self, Write};
 use std::path::Path;
 
-pub(crate) fn save_all_fonts(root: &Path) -> io::Result<()> {
+pub(crate) fn save_all_fonts(root: &Path) -> io::Result<usize> {
+    let mut count = 0;
     for (encoding_index, (encoding_name, fonts)) in FONTS.iter().enumerate() {
         let dir_path = root.join(encoding_name);
         std::fs::create_dir_all(&dir_path)?;
@@ -17,13 +18,15 @@ pub(crate) fn save_all_fonts(root: &Path) -> io::Result<()> {
             let file_name = format!("{}x{}", size.width, size.height);
             let path = dir_path.join(file_name);
             dump_font(&path, encoding_index, font)?;
+            count += 1
         }
     }
-    Ok(())
+    Ok(count)
 }
 
 fn dump_font(path: &Path, encoding_index: usize, font: &MonoFont) -> io::Result<()> {
     let mut file = std::fs::File::create(path)?;
+    file.write_all(&[0x11])?;
     write_u32(&mut file, encoding_index as u32)?;
     write_u32(&mut file, font.character_size.width)?;
     write_u32(&mut file, font.character_size.height)?;

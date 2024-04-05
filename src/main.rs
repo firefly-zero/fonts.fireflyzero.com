@@ -10,5 +10,6 @@ fn main() {
     let default = "../fonts".to_string();
     let root = args.get(1).unwrap_or(&default);
     let root = Path::new(root);
-    save_all_fonts(root).unwrap();
+    let count = save_all_fonts(root).unwrap();
+    println!("Generated {count} fonts")
 }
