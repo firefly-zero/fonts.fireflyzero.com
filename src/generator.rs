@@ -31,6 +31,7 @@ fn dump_font(path: &Path, encoding_index: usize, font: &MonoFont) -> io::Result<
     write_u32(&mut file, font.character_size.width)?;
     write_u32(&mut file, font.character_size.height)?;
     write_u32(&mut file, font.baseline)?;
+    write_u32(&mut file, font.image.size().width)?;
     let mut target = FileWrapper { file };
     font.image.draw(&mut target)
 }
