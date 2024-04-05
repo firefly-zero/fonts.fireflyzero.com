@@ -26,18 +26,23 @@ pub(crate) fn save_all_fonts(root: &Path) -> io::Result<usize> {
 
 fn dump_font(path: &Path, encoding_index: usize, font: &MonoFont) -> io::Result<()> {
     let mut file = std::fs::File::create(path)?;
-    file.write_all(&[0x11])?;
-    write_u32(&mut file, encoding_index as u32)?;
-    write_u32(&mut file, font.character_size.width)?;
-    write_u32(&mut file, font.character_size.height)?;
-    write_u32(&mut file, font.baseline)?;
-    write_u32(&mut file, font.image.size().width)?;
+    let f = &mut file;
+    write_u8(f, 0x11)?;
+    write_u8(f, encoding_index as u8)?;
+    write_u8(f, font.character_size.width as u8)?;
+    write_u8(f, font.character_size.height as u8)?;
+    write_u8(f, font.baseline as u8)?;
+    write_u16(f, font.image.size().width as u16)?;
     let mut target = FileWrapper { file };
     font.image.draw(&mut target)
 }
 
-fn write_u32(file: &mut File, v: u32) -> io::Result<()> {
-    file.write_all(&v.to_le_bytes())
+fn write_u8(f: &mut File, v: u8) -> io::Result<()> {
+    f.write_all(&v.to_le_bytes())
+}
+
+fn write_u16(f: &mut File, v: u16) -> io::Result<()> {
+    f.write_all(&v.to_le_bytes())
 }
 
 struct FileWrapper {
