@@ -15,7 +15,7 @@ pub(crate) fn save_all_fonts(root: &Path) -> io::Result<usize> {
         std::fs::create_dir_all(&dir_path)?;
         for font in fonts.iter() {
             let size = &font.character_size;
-            let file_name = format!("{}x{}", size.width, size.height);
+            let file_name = format!("eg_{}x{}.fff", size.width, size.height);
             let path = dir_path.join(file_name);
             dump_font(&path, encoding_index, font)?;
             count += 1
