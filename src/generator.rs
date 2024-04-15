@@ -74,13 +74,13 @@ impl DrawTarget for FileWrapper {
     where
         I: IntoIterator<Item = Self::Color>,
     {
-        let iter = colors.into_iter().array_chunks::<8>();
-        for colors8 in iter {
-            let mut raw: u8 = 0;
-            for color in colors8 {
-                raw = raw << 1 | color.into_storage();
+        let mut raw: u8 = 0;
+        for (i, color) in colors.into_iter().enumerate() {
+            raw = raw << 1 | color.into_storage();
+            if i % 8 == 7 {
+                self.file.write_all(&[raw])?;
+                raw = 0;
             }
-            self.file.write_all(&[raw])?;
         }
         Ok(())
     }

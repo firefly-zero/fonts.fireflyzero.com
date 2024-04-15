@@ -1,5 +1,3 @@
-#![feature(iter_array_chunks)]
-
 mod fonts;
 mod generator;
 use crate::generator::save_all_fonts;
