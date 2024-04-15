@@ -85,3 +85,30 @@ impl DrawTarget for FileWrapper {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use embedded_graphics::mono_font::ascii;
+
+    const HEADER_SIZE: usize = 7;
+
+    #[test]
+    fn test_save_all_fonts() {
+        let path = std::env::temp_dir().join("test_save_all_fonts");
+        save_all_fonts(&path).unwrap();
+        let iter = std::fs::read_dir(&path).unwrap();
+        // 14 encodings, a separate dir for each encoding
+        assert_eq!(iter.count(), 14);
+    }
+
+    #[test]
+    fn test_dump_font() {
+        let font = ascii::FONT_5X7;
+        let path = std::env::temp_dir().join("test_dump_font");
+        dump_font(&path, 0, &font).unwrap();
+        let dumped = std::fs::read(&path).unwrap();
+        assert_eq!(dumped.len(), 420 + HEADER_SIZE);
+        assert_eq!(dumped[0], u8::to_le_bytes(0x11)[0]);
+    }
+}
