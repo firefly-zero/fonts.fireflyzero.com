@@ -15,7 +15,7 @@ pub(crate) fn fonts_to_images(in_dir: &Path, out_dir: &Path) -> Result<()> {
         for file in files {
             let file = file.context("access font file")?;
             let in_path = file.path();
-            let out_path = out_subdir.join(file.file_name()).with_extension(".png");
+            let out_path = out_subdir.join(file.file_name()).with_extension("png");
             if out_path.exists() {
                 continue;
             }

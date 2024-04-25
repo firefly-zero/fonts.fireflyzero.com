@@ -1,24 +1,36 @@
-<div class="card-body">
-  <ul class="list-unstyled">
-    <li>
-      <i class="fa-solid fa-language fa-fw"></i>
-      Encoding: {{ font.encoding }}
-    </li>
-    <li>
-      <i class="fa-solid fa-layer-group fa-fw"></i>
-      Family: {{ font.family }}
-    </li>
-    <li>
-      <i class="fa-solid fa-up-right-and-down-left-from-center fa-fw"></i>
-      Size: {{ font.width }}x{{ font.height }}
-    </li>
-  </ul>
-  <a
-    href="./fonts/{{font.encoding}}/{{ font.family }}_{{ font.width }}x{{ font.height }}.fff"
-    class="btn btn-light"
-    download
-  >
-    <i class="fa-solid fa-download"></i>
-    download
-  </a>
+<div class="card" style="max-width: 540px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <div class="card-body">
+        <ul class="list-unstyled">
+          <li>
+            <i class="fa-solid fa-language fa-fw"></i>
+            Encoding: {{ font.encoding }}
+          </li>
+          <li>
+            <i class="fa-solid fa-layer-group fa-fw"></i>
+            Family: {{ font.family }}
+          </li>
+          <li>
+            <i class="fa-solid fa-up-right-and-down-left-from-center fa-fw"></i>
+            Size: {{ font.width }}x{{ font.height }}
+          </li>
+        </ul>
+        <a
+          href="./fonts/{{font.encoding}}/{{ font.family }}_{{ font.width }}x{{ font.height }}.fff"
+          class="btn btn-light"
+          download
+        >
+          <i class="fa-solid fa-download"></i>
+          download
+        </a>
+      </div>
+    </div>
+    <div class="col">
+      <img
+        src="./images/{{font.encoding}}/{{ font.family }}_{{ font.width }}x{{ font.height }}.png"
+        class="preview rounded-end"
+      >
+    </div>
+  </div>
 </div>
