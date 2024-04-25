@@ -3,30 +3,7 @@
   <div class="row row-cols-1 row-cols-md-4 g-4">
     {% for font in fonts %}
       <div class="col">
-        <div class="card-body">
-          <ul class="list-unstyled">
-            <li>
-              <i class="fa-solid fa-language fa-fw"></i>
-              Encoding: {{ font.encoding }}
-            </li>
-            <li>
-              <i class="fa-solid fa-layer-group fa-fw"></i>
-              Family: {{ font.family }}
-            </li>
-            <li>
-              <i class="fa-solid fa-up-right-and-down-left-from-center fa-fw"></i>
-              Size: {{ font.width }}x{{ font.height }}
-            </li>
-          </ul>
-          <a
-            href="./fonts/{{font.encoding}}/{{ font.family }}_{{ font.width }}x{{ font.height }}.fff"
-            class="btn btn-light"
-            download
-          >
-            <i class="fa-solid fa-download"></i>
-            download
-          </a>
-        </div>
+        {% include "card.html.j2" %}
       </div>
     {% endfor %}
   </div>
