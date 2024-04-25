@@ -1,0 +1,12 @@
+{% extends "base.html.j2" %}
+{% block body %}
+  <div class="row">
+    <div class="col">
+      {% for font in fonts %}
+        <div>
+          <h5>{{ font.family }} {{ font.width }}x{{ font.height }}</h5>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
