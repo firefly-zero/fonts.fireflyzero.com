@@ -6,5 +6,8 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.82"
 embedded-graphics = { version = "0.8.1" }
-minijinja = { version = "1.0.21", features = ["loader"] }
+image = { version = "0.25.1", default-features = false, features = ["png"] }
+minijinja = { version = "1.0.21", default-features = false, features = [
+    "loader",
+] }
 serde = { version = "1.0.198", features = ["derive"] }
