@@ -4,16 +4,26 @@
     {% for font in fonts %}
       <div class="col">
         <div class="card-body">
-          <ul>
-          <li>Encoding: {{ font.encoding }}</li>
-          <li>Family: {{ font.family }}</li>
-          <li>Size: {{ font.width }}x{{ font.height }}</li>
+          <ul class="list-unstyled">
+            <li>
+              <i class="fa-solid fa-language fa-fw"></i>
+              Encoding: {{ font.encoding }}
+            </li>
+            <li>
+              <i class="fa-solid fa-layer-group fa-fw"></i>
+              Family: {{ font.family }}
+            </li>
+            <li>
+              <i class="fa-solid fa-up-right-and-down-left-from-center fa-fw"></i>
+              Size: {{ font.width }}x{{ font.height }}
+            </li>
           </ul>
           <a
             href="./fonts/{{font.encoding}}/{{ font.family }}_{{ font.width }}x{{ font.height }}.fff"
             class="btn btn-light"
             download
           >
+            <i class="fa-solid fa-download"></i>
             download
           </a>
         </div>
