@@ -337,19 +337,19 @@ static JISX: &[MonoFont] = &[
 ];
 
 // IMPORTANT: Preserve the order!
-pub(crate) static FONTS: &[(&str, &[MonoFont])] = &[
-    ("ascii", ASCII),        // 0. ASCII
-    ("iso_8859_1", ISO_1),   // 1. Latin-1, Western European.
-    ("iso_8859_2", ISO_2),   // 2. Latin-2, Central European.
-    ("iso_8859_3", ISO_3),   // 3. Latin-3, South European.
-    ("iso_8859_4", ISO_4),   // 4. Latin-4, North European.
-    ("iso_8859_9", ISO_9),   // 5. Latin-5, Turkish.
-    ("iso_8859_10", ISO_10), // 6. Latin-6, Nordic.
-    ("iso_8859_13", ISO_13), // 7. Latin-7, Baltic Rim.
-    ("iso_8859_14", ISO_14), // 8. Latin-8, Celtic.
-    ("iso_8859_15", ISO_15), // 9. Latin-9 (revised Latin-1).
-    ("iso_8859_16", ISO_16), // A. Latin-10: South-East European.
-    ("iso_8859_5", ISO_5),   // B. Latin/Cyrillic.
-    ("iso_8859_7", ISO_7),   // C. Latin/Greek.
-    ("jis_x0201", JISX),     // D. Japanese katakana (halfwidth).
+pub(crate) static FONTS: &[(&str, &str, &[MonoFont])] = &[
+    ("eg", "ascii", ASCII),        // 0. ASCII
+    ("eg", "iso_8859_1", ISO_1),   // 1. Latin-1, Western European.
+    ("eg", "iso_8859_2", ISO_2),   // 2. Latin-2, Central European.
+    ("eg", "iso_8859_3", ISO_3),   // 3. Latin-3, South European.
+    ("eg", "iso_8859_4", ISO_4),   // 4. Latin-4, North European.
+    ("eg", "iso_8859_9", ISO_9),   // 5. Latin-5, Turkish.
+    ("eg", "iso_8859_10", ISO_10), // 6. Latin-6, Nordic.
+    ("eg", "iso_8859_13", ISO_13), // 7. Latin-7, Baltic Rim.
+    ("eg", "iso_8859_14", ISO_14), // 8. Latin-8, Celtic.
+    ("eg", "iso_8859_15", ISO_15), // 9. Latin-9 (revised Latin-1).
+    ("eg", "iso_8859_16", ISO_16), // A. Latin-10: South-East European.
+    ("eg", "iso_8859_5", ISO_5),   // B. Latin/Cyrillic.
+    ("eg", "iso_8859_7", ISO_7),   // C. Latin/Greek.
+    ("eg", "jis_x0201", JISX),     // D. Japanese katakana (halfwidth).
 ];

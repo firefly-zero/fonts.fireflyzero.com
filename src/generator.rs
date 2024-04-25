@@ -10,12 +10,12 @@ use std::path::Path;
 
 pub(crate) fn save_all_fonts(root: &Path) -> io::Result<usize> {
     let mut count = 0;
-    for (encoding_index, (encoding_name, fonts)) in FONTS.iter().enumerate() {
+    for (encoding_index, (family_name, encoding_name, fonts)) in FONTS.iter().enumerate() {
         let dir_path = root.join(encoding_name);
         std::fs::create_dir_all(&dir_path)?;
         for font in fonts.iter() {
             let size = &font.character_size;
-            let file_name = format!("eg_{}x{}.fff", size.width, size.height);
+            let file_name = format!("{family_name}_{}x{}.fff", size.width, size.height);
             let path = dir_path.join(file_name);
             dump_font(&path, encoding_index, font)?;
             count += 1
