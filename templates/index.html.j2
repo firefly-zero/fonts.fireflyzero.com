@@ -1,12 +1,23 @@
 {% extends "base.html.j2" %}
 {% block body %}
-  <div class="row">
-    <div class="col">
-      {% for font in fonts %}
-        <div>
-          <h5>{{ font.family }} {{ font.width }}x{{ font.height }}</h5>
+  <div class="row row-cols-1 row-cols-md-4 g-4">
+    {% for font in fonts %}
+      <div class="col">
+        <div class="card-body">
+          <ul>
+          <li>Encoding: {{ font.encoding }}</li>
+          <li>Family: {{ font.family }}</li>
+          <li>Size: {{ font.width }}x{{ font.height }}</li>
+          </ul>
+          <a
+            href="./fonts/{{font.encoding}}/{{ font.family }}_{{ font.width }}x{{ font.height }}.fff"
+            class="btn btn-light"
+            download
+          >
+            download
+          </a>
         </div>
-      {% endfor %}
-    </div>
+      </div>
+    {% endfor %}
   </div>
 {% endblock %}
