@@ -2,9 +2,81 @@ use crate::fonts::FONTS;
 use anyhow::{Context, Result};
 use minijinja::{context, Environment};
 use serde::Serialize;
-use std::collections::HashSet;
 use std::fs;
 use std::path::Path;
+
+static ENCODINGS: &[Encoding] = &[
+    Encoding {
+        slug:  "ascii",
+        title: "ASCII",
+        icon:  "🇺🇸",
+    },
+    Encoding {
+        slug:  "iso_8859_1",
+        title: "Latin-1, Western European.",
+        icon:  "🇵🇹",
+    },
+    Encoding {
+        slug:  "iso_8859_2",
+        title: "Latin-2, Central European.",
+        icon:  "🇩🇪",
+    },
+    Encoding {
+        slug:  "iso_8859_3",
+        title: "Latin-3, South European.",
+        icon:  "🇲🇹",
+    },
+    Encoding {
+        slug:  "iso_8859_4",
+        title: "Latin-4, North European.",
+        icon:  "🇪🇪",
+    },
+    Encoding {
+        slug:  "iso_8859_9",
+        title: "Latin-5, Turkish.",
+        icon:  "🇹🇷",
+    },
+    Encoding {
+        slug:  "iso_8859_10",
+        title: "Latin-6, Nordic.",
+        icon:  "🇳🇴",
+    },
+    Encoding {
+        slug:  "iso_8859_13",
+        title: "Latin-7, Baltic Rim.",
+        icon:  "🇵🇱",
+    },
+    Encoding {
+        slug:  "iso_8859_14",
+        title: "Latin-8, Celtic.",
+        icon:  "🇮🇪",
+    },
+    Encoding {
+        slug:  "iso_8859_15",
+        title: "Latin-9 (revised Latin-1).",
+        icon:  "🇵🇹",
+    },
+    Encoding {
+        slug:  "iso_8859_16",
+        title: "Latin-10: South-East European.",
+        icon:  "🇷🇴",
+    },
+    Encoding {
+        slug:  "iso_8859_5",
+        title: "Latin/Cyrillic.",
+        icon:  "🇷🇺",
+    },
+    Encoding {
+        slug:  "iso_8859_7",
+        title: "Latin/Greek.",
+        icon:  "🇬🇷",
+    },
+    Encoding {
+        slug:  "jis_x0201",
+        title: "Japanese katakana (halfwidth).",
+        icon:  "🇯🇵",
+    },
+];
 
 #[derive(Serialize)]
 struct Font {
@@ -12,6 +84,13 @@ struct Font {
     width:    u32,
     height:   u32,
     encoding: &'static str,
+}
+
+#[derive(Serialize)]
+struct Encoding {
+    slug:  &'static str,
+    title: &'static str,
+    icon:  &'static str,
 }
 
 pub(crate) fn build_html(root: &Path) -> Result<()> {
@@ -26,19 +105,12 @@ pub(crate) fn build_html(root: &Path) -> Result<()> {
     }
 
     let all_fonts = make_fonts();
-    let mut encodings: Vec<&str> = all_fonts
-        .iter()
-        .map(|f| f.encoding)
-        .collect::<HashSet<_>>()
-        .into_iter()
-        .collect();
-    encodings.sort();
 
     {
         let out_path = root.join("index.html");
         let tmpl = env.get_template("index.html.j2").context("get template")?;
         let rendered = tmpl
-            .render(context!(encodings => encodings))
+            .render(context!(encodings => ENCODINGS))
             .context("render template")?;
         fs::write(out_path, rendered).context("write html file")?;
     }
@@ -46,14 +118,14 @@ pub(crate) fn build_html(root: &Path) -> Result<()> {
     let tmpl = env
         .get_template("encoding.html.j2")
         .context("get template")?;
-    for encoding in encodings {
+    for encoding in ENCODINGS {
         let fonts: Vec<_> = all_fonts
             .iter()
-            .filter(|f| f.encoding == encoding)
+            .filter(|f| f.encoding == encoding.slug)
             .collect();
-        let out_path = root.join(format!("{encoding}.html"));
+        let out_path = root.join(format!("{}.html", encoding.slug));
         let rendered = tmpl
-            .render(context!(fonts => fonts))
+            .render(context!(fonts => fonts, encoding => encoding))
             .context("render template")?;
         fs::write(out_path, rendered).context("write html file")?;
     }

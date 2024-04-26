@@ -1,10 +1,13 @@
 {% extends "base.html.j2" %}
 {% block body %}
+  <h1 class="text-center">
+    Fonts for <a href="https://fireflyzero.com/">Firefly Zero</a>
+  </h1>
   <div class="row row-cols-2 row-cols-md-4 g-1">
     {% for encoding in encodings %}
       <div class="col">
-        <a href="{{ encoding }}.html" class="btn btn-light" style="width: 100%">
-          {{ encoding }}
+        <a href="{{ encoding.slug }}.html" class="btn btn-light text-start" style="width: 100%">
+          {{ encoding.icon }} {{ encoding.title }}
         </a>
       </div>
     {% endfor %}
