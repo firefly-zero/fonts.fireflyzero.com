@@ -1,9 +1,11 @@
 {% extends "base.html.j2" %}
 {% block body %}
-  <div class="row row-cols-1 row-cols-md-2 g-1">
-    {% for font in fonts %}
+  <div class="row row-cols-2 row-cols-md-4 g-1">
+    {% for encoding in encodings %}
       <div class="col">
-        {% include "card.html.j2" %}
+        <a href="{{ encoding }}.html" class="btn btn-light" style="width: 100%">
+          {{ encoding }}
+        </a>
       </div>
     {% endfor %}
   </div>

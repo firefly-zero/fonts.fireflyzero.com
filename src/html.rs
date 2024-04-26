@@ -2,14 +2,15 @@ use crate::fonts::FONTS;
 use anyhow::{Context, Result};
 use minijinja::{context, Environment};
 use serde::Serialize;
+use std::collections::HashSet;
 use std::fs;
 use std::path::Path;
 
 #[derive(Serialize)]
 struct Font {
-    family: &'static str,
-    width: u32,
-    height: u32,
+    family:   &'static str,
+    width:    u32,
+    height:   u32,
     encoding: &'static str,
 }
 
@@ -24,13 +25,39 @@ pub(crate) fn build_html(root: &Path) -> Result<()> {
         env.add_template_owned(file_name, content)?;
     }
 
-    let tmpl = env.get_template("index.html.j2").context("get template")?;
-    let fonts = make_fonts();
-    let out_path = root.join("index.html");
-    let rendered = tmpl
-        .render(context!(fonts => fonts))
-        .context("render template")?;
-    fs::write(out_path, rendered).context("write html file")?;
+    let all_fonts = make_fonts();
+    let mut encodings: Vec<&str> = all_fonts
+        .iter()
+        .map(|f| f.encoding)
+        .collect::<HashSet<_>>()
+        .into_iter()
+        .collect();
+    encodings.sort();
+
+    {
+        let out_path = root.join("index.html");
+        let tmpl = env.get_template("index.html.j2").context("get template")?;
+        let rendered = tmpl
+            .render(context!(encodings => encodings))
+            .context("render template")?;
+        fs::write(out_path, rendered).context("write html file")?;
+    }
+
+    let tmpl = env
+        .get_template("encoding.html.j2")
+        .context("get template")?;
+    for encoding in encodings {
+        let fonts: Vec<_> = all_fonts
+            .iter()
+            .filter(|f| f.encoding == encoding)
+            .collect();
+        let out_path = root.join(format!("{encoding}.html"));
+        let rendered = tmpl
+            .render(context!(fonts => fonts))
+            .context("render template")?;
+        fs::write(out_path, rendered).context("write html file")?;
+    }
+
     Ok(())
 }
 
