@@ -8,9 +8,31 @@ use std::fs::File;
 use std::io::{self, Write};
 use std::path::Path;
 
+static ENCODINGS: &[&str] = &[
+    "ascii",       // 0. ASCII
+    "iso_8859_1",  // 1. Latin-1, Western European.
+    "iso_8859_2",  // 2. Latin-2, Central European.
+    "iso_8859_3",  // 3. Latin-3, South European.
+    "iso_8859_4",  // 4. Latin-4, North European.
+    "iso_8859_9",  // 5. Latin-5, Turkish.
+    "iso_8859_10", // 6. Latin-6, Nordic.
+    "iso_8859_13", // 7. Latin-7, Baltic Rim.
+    "iso_8859_14", // 8. Latin-8, Celtic.
+    "iso_8859_15", // 9. Latin-9 (revised Latin-1).
+    "iso_8859_16", // A. Latin-10: South-East European.
+    "iso_8859_5",  // B. Latin/Cyrillic.
+    "iso_8859_7",  // C. Latin/Greek.
+    "jis_x0201",   // D. Japanese katakana (halfwidth).
+];
+
 pub(crate) fn save_all_fonts(root: &Path) -> io::Result<usize> {
     let mut count = 0;
-    for (encoding_index, (family_name, encoding_name, fonts)) in FONTS.iter().enumerate() {
+    for (family_name, encoding_name, fonts) in FONTS.iter() {
+        let (encoding_index, _) = ENCODINGS
+            .iter()
+            .enumerate()
+            .find(|(_, e)| *e == encoding_name)
+            .unwrap();
         let dir_path = root.join(encoding_name);
         std::fs::create_dir_all(&dir_path)?;
         for font in fonts.iter() {
@@ -51,7 +73,7 @@ struct FileWrapper {
 
 impl OriginDimensions for FileWrapper {
     fn size(&self) -> Size {
-        panic!("not implemented")
+        unimplemented!("not implemented")
     }
 }
 
@@ -63,7 +85,7 @@ impl DrawTarget for FileWrapper {
     where
         I: IntoIterator<Item = Pixel<Self::Color>>,
     {
-        panic!("use fill_contiguous instead")
+        unimplemented!("use fill_contiguous instead")
     }
 
     fn fill_contiguous<I>(
