@@ -1,3 +1,4 @@
+use crate::extra_fonts::{get_fonts, load_atlases};
 use crate::fonts::FONTS;
 use anyhow::{Context, Result};
 use minijinja::{context, Environment};
@@ -7,90 +8,90 @@ use std::path::Path;
 
 static ENCODINGS: &[Encoding] = &[
     Encoding {
-        slug:  "ascii",
+        slug: "ascii",
         title: "ASCII",
-        icon:  "🇺🇸",
+        icon: "🇺🇸",
     },
     Encoding {
-        slug:  "iso_8859_1",
+        slug: "iso_8859_1",
         title: "Latin-1, Western European.",
-        icon:  "🇵🇹",
+        icon: "🇵🇹",
     },
     Encoding {
-        slug:  "iso_8859_2",
+        slug: "iso_8859_2",
         title: "Latin-2, Central European.",
-        icon:  "🇩🇪",
+        icon: "🇩🇪",
     },
     Encoding {
-        slug:  "iso_8859_3",
+        slug: "iso_8859_3",
         title: "Latin-3, South European.",
-        icon:  "🇲🇹",
+        icon: "🇲🇹",
     },
     Encoding {
-        slug:  "iso_8859_4",
+        slug: "iso_8859_4",
         title: "Latin-4, North European.",
-        icon:  "🇪🇪",
+        icon: "🇪🇪",
     },
     Encoding {
-        slug:  "iso_8859_9",
+        slug: "iso_8859_9",
         title: "Latin-5, Turkish.",
-        icon:  "🇹🇷",
+        icon: "🇹🇷",
     },
     Encoding {
-        slug:  "iso_8859_10",
+        slug: "iso_8859_10",
         title: "Latin-6, Nordic.",
-        icon:  "🇳🇴",
+        icon: "🇳🇴",
     },
     Encoding {
-        slug:  "iso_8859_13",
+        slug: "iso_8859_13",
         title: "Latin-7, Baltic Rim.",
-        icon:  "🇵🇱",
+        icon: "🇵🇱",
     },
     Encoding {
-        slug:  "iso_8859_14",
+        slug: "iso_8859_14",
         title: "Latin-8, Celtic.",
-        icon:  "🇮🇪",
+        icon: "🇮🇪",
     },
     Encoding {
-        slug:  "iso_8859_15",
+        slug: "iso_8859_15",
         title: "Latin-9 (revised Latin-1).",
-        icon:  "🇵🇹",
+        icon: "🇵🇹",
     },
     Encoding {
-        slug:  "iso_8859_16",
+        slug: "iso_8859_16",
         title: "Latin-10: South-East European.",
-        icon:  "🇷🇴",
+        icon: "🇷🇴",
     },
     Encoding {
-        slug:  "iso_8859_5",
+        slug: "iso_8859_5",
         title: "Latin/Cyrillic.",
-        icon:  "🇷🇺",
+        icon: "🇷🇺",
     },
     Encoding {
-        slug:  "iso_8859_7",
+        slug: "iso_8859_7",
         title: "Latin/Greek.",
-        icon:  "🇬🇷",
+        icon: "🇬🇷",
     },
     Encoding {
-        slug:  "jis_x0201",
+        slug: "jis_x0201",
         title: "Japanese katakana (halfwidth).",
-        icon:  "🇯🇵",
+        icon: "🇯🇵",
     },
 ];
 
 #[derive(Serialize)]
 struct Font {
-    family:   &'static str,
-    width:    u32,
-    height:   u32,
+    family: &'static str,
+    width: u32,
+    height: u32,
     encoding: &'static str,
 }
 
 #[derive(Serialize)]
 struct Encoding {
-    slug:  &'static str,
+    slug: &'static str,
     title: &'static str,
-    icon:  &'static str,
+    icon: &'static str,
 }
 
 pub(crate) fn build_html(root: &Path) -> Result<()> {
@@ -144,6 +145,17 @@ fn make_fonts() -> Vec<Font> {
                 height: font.character_size.height,
             })
         }
+    }
+
+    let atlases = load_atlases().unwrap();
+    let fonts = get_fonts(&atlases);
+    for (family, font) in fonts {
+        result.push(Font {
+            family,
+            encoding: "ascii",
+            width: font.character_size.width,
+            height: font.character_size.height,
+        })
     }
     result
 }

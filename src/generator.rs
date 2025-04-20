@@ -1,4 +1,6 @@
+use crate::extra_fonts::{get_fonts, load_atlases};
 use crate::fonts::FONTS;
+use anyhow::{Context, Result};
 use embedded_graphics::draw_target::DrawTarget;
 use embedded_graphics::geometry::OriginDimensions;
 use embedded_graphics::mono_font::MonoFont;
@@ -25,7 +27,7 @@ static ENCODINGS: &[&str] = &[
     "jis_x0201",   // D. Japanese katakana (halfwidth).
 ];
 
-pub(crate) fn save_all_fonts(root: &Path) -> io::Result<usize> {
+pub(crate) fn save_all_fonts(root: &Path) -> Result<usize> {
     let mut count = 0;
     for (family_name, encoding_name, fonts) in FONTS.iter() {
         let (encoding_index, _) = ENCODINGS
@@ -34,15 +36,28 @@ pub(crate) fn save_all_fonts(root: &Path) -> io::Result<usize> {
             .find(|(_, e)| *e == encoding_name)
             .unwrap();
         let dir_path = root.join(encoding_name);
-        std::fs::create_dir_all(&dir_path)?;
+        std::fs::create_dir_all(&dir_path).context("create encoding dir")?;
         for font in fonts.iter() {
             let size = &font.character_size;
             let file_name = format!("{family_name}_{}x{}.fff", size.width, size.height);
             let path = dir_path.join(file_name);
-            dump_font(&path, encoding_index, font)?;
+            dump_font(&path, encoding_index, font).context("dump font")?;
             count += 1
         }
     }
+
+    let atlases = load_atlases().context("load atlases")?;
+    let fonts = get_fonts(&atlases);
+    let dir_path = root.join("ascii");
+    let encoding_index = 0;
+    for (family_name, font) in fonts {
+        let size = &font.character_size;
+        let file_name = format!("{family_name}_{}x{}.fff", size.width, size.height);
+        let path = dir_path.join(file_name);
+        dump_font(&path, encoding_index, &font).context("dump font")?;
+        count += 1
+    }
+
     Ok(count)
 }
 
