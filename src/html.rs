@@ -105,7 +105,7 @@ pub(crate) fn build_html(root: &Path) -> Result<()> {
         env.add_template_owned(file_name, content)?;
     }
 
-    let all_fonts = make_fonts();
+    let all_fonts = make_fonts().context("make fonts")?;
 
     {
         let out_path = root.join("index.html");
@@ -134,7 +134,7 @@ pub(crate) fn build_html(root: &Path) -> Result<()> {
     Ok(())
 }
 
-fn make_fonts() -> Vec<Font> {
+fn make_fonts() -> Result<Vec<Font>> {
     let mut result = Vec::new();
     for (family, encoding, fonts) in FONTS {
         for font in *fonts {
@@ -147,7 +147,7 @@ fn make_fonts() -> Vec<Font> {
         }
     }
 
-    let atlases = load_atlases().unwrap();
+    let atlases = load_atlases().context("load atlases")?;
     let fonts = get_fonts(&atlases);
     for (family, font) in fonts {
         result.push(Font {
@@ -157,5 +157,5 @@ fn make_fonts() -> Vec<Font> {
             height: font.character_size.height,
         })
     }
-    result
+    Ok(result)
 }

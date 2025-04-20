@@ -37,7 +37,7 @@ fn load_atlas(file_name: &'static str) -> Result<Vec<u8>> {
     let mut raw = Vec::new();
     let mut byte: u8 = 0;
     for (i, color) in img.iter().enumerate() {
-        byte = byte << 1 | color;
+        byte = byte << 1 | u8::from(*color != 0);
         if i % 8 == 7 {
             raw.push(byte);
             byte = 0;
