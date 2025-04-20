@@ -136,17 +136,6 @@ pub(crate) fn build_html(root: &Path) -> Result<()> {
 
 fn make_fonts() -> Result<Vec<Font>> {
     let mut result = Vec::new();
-    for (family, encoding, fonts) in FONTS {
-        for font in *fonts {
-            result.push(Font {
-                family,
-                encoding,
-                width: font.character_size.width,
-                height: font.character_size.height,
-            })
-        }
-    }
-
     let atlases = load_atlases().context("load atlases")?;
     let fonts = get_fonts(&atlases);
     for (family, font) in fonts {
@@ -156,6 +145,17 @@ fn make_fonts() -> Result<Vec<Font>> {
             width: font.character_size.width,
             height: font.character_size.height,
         })
+    }
+
+    for (family, encoding, fonts) in FONTS {
+        for font in *fonts {
+            result.push(Font {
+                family,
+                encoding,
+                width: font.character_size.width,
+                height: font.character_size.height,
+            })
+        }
     }
     Ok(result)
 }
