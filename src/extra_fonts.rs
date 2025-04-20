@@ -9,6 +9,7 @@ use embedded_graphics::{
 
 type Atlases = HashMap<&'static str, Vec<u8>>;
 
+/// Convert atlases into embedded-graphics fonts.
 pub(crate) fn get_fonts(atlases: &Atlases) -> Vec<(&'static str, MonoFont<'_>)> {
     let ibm437b = MonoFont {
         image: ImageRaw::new(&atlases["ibm437b"], 128),
@@ -54,6 +55,7 @@ pub(crate) fn get_fonts(atlases: &Atlases) -> Vec<(&'static str, MonoFont<'_>)> 
     ]
 }
 
+/// Load font atlases from filesystem.
 pub(crate) fn load_atlases() -> Result<Atlases> {
     let mut res = HashMap::new();
     res.insert("ibm437b", load_atlas("ibm437b_8x8.png")?);
