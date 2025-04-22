@@ -47,11 +47,21 @@ pub(crate) fn get_fonts(atlases: &Atlases) -> Vec<(&'static str, MonoFont<'_>)> 
         underline: DecorationDimensions::new(10, 1),
         glyph_mapping: &embedded_graphics::mono_font::mapping::ASCII,
     };
+    let mem = MonoFont {
+        image: ImageRaw::new(&atlases["mem"], 64),
+        character_size: Size::new(4, 4),
+        character_spacing: 0,
+        baseline: 3,
+        strikethrough: DecorationDimensions::new(2, 1),
+        underline: DecorationDimensions::new(4, 1),
+        glyph_mapping: &embedded_graphics::mono_font::mapping::ASCII,
+    };
     vec![
         ("pico8", pico8),
         ("profont", profont),
         ("ibm437b", ibm437b),
         ("ibm437r", ibm437r),
+        ("mem", mem),
     ]
 }
 
@@ -62,6 +72,7 @@ pub(crate) fn load_atlases() -> Result<Atlases> {
     res.insert("ibm437r", load_atlas("ibm437r_8x8.png")?);
     res.insert("pico8", load_atlas("pico8_4x6.png")?);
     res.insert("profont", load_atlas("profont_5x10.png")?);
+    res.insert("mem", load_atlas("mem_4x4.png")?);
     Ok(res)
 }
 
