@@ -4,16 +4,16 @@
       <div class="card-body">
         <ul class="list-unstyled">
           <li>
-            <i class="fa-solid fa-layer-group fa-fw"></i>
-            Family: {{ font.family }}
+            <i class="fa-solid fa-layer-group fa-fw" title="family"></i>
+            {{ font.family }}
           </li>
           <li>
-            <i class="fa-solid fa-up-right-and-down-left-from-center fa-fw"></i>
-            Size: {{ font.width }}x{{ font.height }}
+            <i class="fa-solid fa-up-right-and-down-left-from-center fa-fw" title="size"></i>
+            {{ font.width }}x{{ font.height }}
           </li>
           <li>
-            <i class="fa-solid fa-file fa-fw"></i>
-            License: <a href="{{ font.license.url }}">{{ font.license.spdx }}</a>
+            <i class="fa-solid fa-file fa-fw" title="license"></i>
+            <a href="{{ font.license.url }}">{{ font.license.spdx }}</a>
           </li>
         </ul>
         <a
