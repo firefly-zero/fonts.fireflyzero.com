@@ -336,7 +336,6 @@ static JISX: &[MonoFont] = &[
     jis_x0201::FONT_10X20,
 ];
 
-// IMPORTANT: Preserve the order!
 pub(crate) static FONTS: &[(&str, &str, &[MonoFont])] = &[
     ("eg", "ascii", ASCII),        // 0. ASCII
     ("eg", "iso_8859_1", ISO_1),   // 1. Latin-1, Western European.

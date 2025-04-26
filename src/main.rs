@@ -1,3 +1,4 @@
+mod extra_fonts;
 mod fonts;
 mod generator;
 mod html;
