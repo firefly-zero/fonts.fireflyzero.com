@@ -11,6 +11,10 @@
             <i class="fa-solid fa-up-right-and-down-left-from-center fa-fw"></i>
             Size: {{ font.width }}x{{ font.height }}
           </li>
+          <li>
+            <i class="fa-solid fa-file fa-fw"></i>
+            License: <a href="{{ font.license.url }}">{{ font.license.spdx }}</a>
+          </li>
         </ul>
         <a
           href="./fonts/{{font.encoding}}/{{ font.family }}_{{ font.width }}x{{ font.height }}.fff"

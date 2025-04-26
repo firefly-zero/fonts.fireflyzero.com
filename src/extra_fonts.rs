@@ -6,6 +6,7 @@ use embedded_graphics::{
     mono_font::{DecorationDimensions, MonoFont},
     prelude::*,
 };
+use serde::Serialize;
 
 type Atlases = HashMap<&'static str, Vec<u8>>;
 
@@ -15,7 +16,7 @@ pub(crate) struct Font<'a> {
     pub license: License,
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Serialize)]
 pub(crate) struct License {
     /// https://spdx.org/licenses/
     pub spdx: &'static str,

@@ -90,6 +90,7 @@ struct Font {
     width: u32,
     height: u32,
     encoding: &'static str,
+    license: License,
 }
 
 #[derive(Serialize)]
@@ -149,6 +150,7 @@ fn make_fonts() -> Result<Vec<Font>> {
             encoding: "ascii",
             width: font.font.character_size.width,
             height: font.font.character_size.height,
+            license: font.license,
         })
     }
 
@@ -159,6 +161,7 @@ fn make_fonts() -> Result<Vec<Font>> {
                 encoding,
                 width: font.character_size.width,
                 height: font.character_size.height,
+                license: EG_LICENSE,
             })
         }
     }
