@@ -50,11 +50,11 @@ pub(crate) fn save_all_fonts(root: &Path) -> Result<usize> {
     let fonts = get_fonts(&atlases);
     let dir_path = root.join("ascii");
     let encoding_index = 0;
-    for (family_name, font) in fonts {
-        let size = &font.character_size;
-        let file_name = format!("{family_name}_{}x{}.fff", size.width, size.height);
+    for font in fonts {
+        let size = &font.font.character_size;
+        let file_name = format!("{}_{}x{}.fff", font.family, size.width, size.height);
         let path = dir_path.join(file_name);
-        dump_font(&path, encoding_index, &font).context("dump font")?;
+        dump_font(&path, encoding_index, &font.font).context("dump font")?;
         count += 1
     }
 

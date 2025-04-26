@@ -9,8 +9,21 @@ use embedded_graphics::{
 
 type Atlases = HashMap<&'static str, Vec<u8>>;
 
+pub(crate) struct Font<'a> {
+    pub family: &'static str,
+    pub font: MonoFont<'a>,
+    pub license: License,
+}
+
+#[derive(Copy, Clone)]
+pub(crate) struct License {
+    /// https://spdx.org/licenses/
+    pub spdx: &'static str,
+    pub url: &'static str,
+}
+
 /// Convert atlases into embedded-graphics fonts.
-pub(crate) fn get_fonts(atlases: &Atlases) -> Vec<(&'static str, MonoFont<'_>)> {
+pub(crate) fn get_fonts(atlases: &Atlases) -> Vec<Font<'_>> {
     let ibm437b = MonoFont {
         image: ImageRaw::new(&atlases["ibm437b"], 128),
         character_size: Size::new(8, 8),
@@ -57,11 +70,46 @@ pub(crate) fn get_fonts(atlases: &Atlases) -> Vec<(&'static str, MonoFont<'_>)> 
         glyph_mapping: &embedded_graphics::mono_font::mapping::ASCII,
     };
     vec![
-        ("pico8", pico8),
-        ("profont", profont),
-        ("ibm437b", ibm437b),
-        ("ibm437r", ibm437r),
-        ("mem", mem),
+        Font {
+            family: "pico8",
+            font: pico8,
+            license: License {
+                spdx: "CC0-1.0",
+                url: "https://www.lexaloffle.com/pico-8.php?page=faq",
+            },
+        },
+        Font {
+            family: "profont",
+            font: profont,
+            license: License {
+                spdx: "MIT",
+                url: "https://tobiasjung.name/profont/",
+            },
+        },
+        Font {
+            family: "ibm437b",
+            font: ibm437b,
+            license: License {
+                spdx: "MIT",
+                url: "https://github.com/sbechet/ibm437/blob/master/LICENCE",
+            },
+        },
+        Font {
+            family: "ibm437r",
+            font: ibm437r,
+            license: License {
+                spdx: "MIT",
+                url: "https://github.com/sbechet/ibm437/blob/master/LICENCE",
+            },
+        },
+        Font {
+            family: "mem",
+            font: mem,
+            license: License {
+                spdx: "AGPL-3.0",
+                url: "https://github.com/oidoid/mem/blob/main/license.text",
+            },
+        },
     ]
 }
 

@@ -1,4 +1,4 @@
-use crate::extra_fonts::{get_fonts, load_atlases};
+use crate::extra_fonts::{get_fonts, load_atlases, License};
 use crate::fonts::FONTS;
 use anyhow::{Context, Result};
 use minijinja::{context, Environment};
@@ -79,6 +79,11 @@ static ENCODINGS: &[Encoding] = &[
     },
 ];
 
+static EG_LICENSE: License = License {
+    spdx: "MIT",
+    url: "https://github.com/embedded-graphics/embedded-graphics/blob/master/README.md#license",
+};
+
 #[derive(Serialize)]
 struct Font {
     family: &'static str,
@@ -138,12 +143,12 @@ fn make_fonts() -> Result<Vec<Font>> {
     let mut result = Vec::new();
     let atlases = load_atlases().context("load atlases")?;
     let fonts = get_fonts(&atlases);
-    for (family, font) in fonts {
+    for font in fonts {
         result.push(Font {
-            family,
+            family: font.family,
             encoding: "ascii",
-            width: font.character_size.width,
-            height: font.character_size.height,
+            width: font.font.character_size.width,
+            height: font.font.character_size.height,
         })
     }
 
