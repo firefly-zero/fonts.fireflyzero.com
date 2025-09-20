@@ -70,6 +70,15 @@ pub(crate) fn get_fonts(atlases: &Atlases) -> Vec<Font<'_>> {
         underline: DecorationDimensions::new(4, 1),
         glyph_mapping: &embedded_graphics::mono_font::mapping::ASCII,
     };
+    let sixel = MonoFont {
+        image: ImageRaw::new(&atlases["sixel"], 16),
+        character_size: Size::new(1, 6),
+        character_spacing: 0,
+        baseline: 6,
+        strikethrough: DecorationDimensions::new(3, 1),
+        underline: DecorationDimensions::new(7, 1),
+        glyph_mapping: &embedded_graphics::mono_font::mapping::ASCII,
+    };
     vec![
         Font {
             family: "pico8",
@@ -111,6 +120,14 @@ pub(crate) fn get_fonts(atlases: &Atlases) -> Vec<Font<'_>> {
                 url: "https://github.com/oidoid/mem/blob/main/license.text",
             },
         },
+        Font {
+            family: "sixel",
+            font: sixel,
+            license: License {
+                spdx: "MIT",
+                url: "https://saitoha.github.io/libsixel/",
+            },
+        },
     ]
 }
 
@@ -122,6 +139,7 @@ pub(crate) fn load_atlases() -> Result<Atlases> {
     res.insert("pico8", load_atlas("pico8_4x6.png")?);
     res.insert("profont", load_atlas("profont_5x10.png")?);
     res.insert("mem", load_atlas("mem_4x4.png")?);
+    res.insert("sixel", load_atlas("sixel_1x6.png")?);
     Ok(res)
 }
 
