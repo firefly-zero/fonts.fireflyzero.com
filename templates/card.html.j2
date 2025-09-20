@@ -30,6 +30,7 @@
       <img
         src="./images/{{font.encoding}}/{{ font.family }}_{{ font.width }}x{{ font.height }}.png"
         class="preview rounded-end"
+        {% if font.width == 1 %}style="min-width: auto; min-height: 100%"{% endif %}
       >
     </div>
   </div>
