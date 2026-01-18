@@ -52,6 +52,15 @@ pub(crate) fn get_fonts(atlases: &Atlases) -> Vec<Font<'_>> {
         underline: DecorationDimensions::new(6, 1),
         glyph_mapping: &embedded_graphics::mono_font::mapping::ASCII,
     };
+    let kenney = MonoFont {
+        image: ImageRaw::new(&atlases["kenney"], 256),
+        character_size: Size::new(16, 16),
+        character_spacing: 0,
+        baseline: 14,
+        strikethrough: DecorationDimensions::new(8, 2),
+        underline: DecorationDimensions::new(15, 2),
+        glyph_mapping: &embedded_graphics::mono_font::mapping::ASCII,
+    };
     let profont = MonoFont {
         image: ImageRaw::new(&atlases["profont"], 80),
         character_size: Size::new(5, 10),
@@ -128,6 +137,14 @@ pub(crate) fn get_fonts(atlases: &Atlases) -> Vec<Font<'_>> {
                 url: "https://saitoha.github.io/libsixel/",
             },
         },
+        Font {
+            family: "kenney",
+            font: kenney,
+            license: License {
+                spdx: "CC0-1.0",
+                url: "https://www.kenney.nl/assets/1-bit-pack",
+            },
+        },
     ]
 }
 
@@ -140,6 +157,7 @@ pub(crate) fn load_atlases() -> Result<Atlases> {
     res.insert("profont", load_atlas("profont_5x10.png")?);
     res.insert("mem", load_atlas("mem_4x4.png")?);
     res.insert("sixel", load_atlas("sixel_1x6.png")?);
+    res.insert("kenney", load_atlas("kenney_16x16.png")?);
     Ok(res)
 }
 
