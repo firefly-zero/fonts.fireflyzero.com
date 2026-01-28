@@ -30,8 +30,24 @@
       <img
         src="./images/{{font.encoding}}/{{ font.family }}_{{ font.width }}x{{ font.height }}.png"
         class="preview rounded-end"
+        data-bs-toggle="modal"
+        data-bs-target="#modal-{{ font.family }}_{{ font.width }}x{{ font.height }}"
         {% if font.width == 1 %}style="min-width: auto; min-height: 100%"{% endif %}
       >
     </div>
+  </div>
+</div>
+
+<div
+  class="modal"
+  id="modal-{{ font.family }}_{{ font.width }}x{{ font.height }}"
+  tabindex="-1"
+>
+  <div class="modal-dialog modal-dialog-centered p-1 rounded" style="background-color: white">
+    <img
+      src="./images/{{font.encoding}}/{{ font.family }}_{{ font.width }}x{{ font.height }}.png"
+      class="preview"
+      {% if font.width == 1 %}style="min-width: auto; min-height: 90vh"{% endif %}
+    >
   </div>
 </div>
