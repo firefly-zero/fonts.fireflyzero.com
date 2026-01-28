@@ -7,7 +7,7 @@ pub(crate) fn fonts_to_images(in_dir: &Path, out_dir: &Path) -> Result<()> {
     fs::create_dir_all(out_dir).context("create images dir")?;
     let dirs = fs::read_dir(in_dir).context("read input dir")?;
     for subdir in dirs {
-        let subdir = subdir.context("acces subdir")?;
+        let subdir = subdir.context("access subdir")?;
         let files = fs::read_dir(subdir.path()).context("read input subdir")?;
         let out_subdir = out_dir.join(subdir.file_name());
         fs::create_dir_all(&out_subdir).context("create images subdir")?;

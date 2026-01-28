@@ -52,8 +52,17 @@ pub(crate) fn get_fonts(atlases: &Atlases) -> Vec<Font<'_>> {
         underline: DecorationDimensions::new(6, 1),
         glyph_mapping: &embedded_graphics::mono_font::mapping::ASCII,
     };
-    let kenney = MonoFont {
-        image: ImageRaw::new(&atlases["kenney"], 256),
+    let kenney11 = MonoFont {
+        image: ImageRaw::new(&atlases["kenney11"], 176),
+        character_size: Size::new(11, 14),
+        character_spacing: 0,
+        baseline: 14,
+        strikethrough: DecorationDimensions::new(7, 2),
+        underline: DecorationDimensions::new(15, 2),
+        glyph_mapping: &embedded_graphics::mono_font::mapping::ASCII,
+    };
+    let kenney16 = MonoFont {
+        image: ImageRaw::new(&atlases["kenney16"], 256),
         character_size: Size::new(16, 16),
         character_spacing: 0,
         baseline: 14,
@@ -139,7 +148,15 @@ pub(crate) fn get_fonts(atlases: &Atlases) -> Vec<Font<'_>> {
         },
         Font {
             family: "kenney",
-            font: kenney,
+            font: kenney11,
+            license: License {
+                spdx: "CC0-1.0",
+                url: "https://www.kenney.nl/assets/1-bit-pack",
+            },
+        },
+        Font {
+            family: "kenney",
+            font: kenney16,
             license: License {
                 spdx: "CC0-1.0",
                 url: "https://www.kenney.nl/assets/1-bit-pack",
@@ -157,7 +174,8 @@ pub(crate) fn load_atlases() -> Result<Atlases> {
     res.insert("profont", load_atlas("profont_5x10.png")?);
     res.insert("mem", load_atlas("mem_4x4.png")?);
     res.insert("sixel", load_atlas("sixel_1x6.png")?);
-    res.insert("kenney", load_atlas("kenney_16x16.png")?);
+    res.insert("kenney11", load_atlas("kenney_11x14.png")?);
+    res.insert("kenney16", load_atlas("kenney_16x16.png")?);
     Ok(res)
 }
 
