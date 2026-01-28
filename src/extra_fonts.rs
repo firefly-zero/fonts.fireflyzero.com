@@ -79,13 +79,31 @@ pub(crate) fn get_fonts(atlases: &Atlases) -> Vec<Font<'_>> {
         underline: DecorationDimensions::new(10, 1),
         glyph_mapping: &embedded_graphics::mono_font::mapping::ASCII,
     };
-    let mem = MonoFont {
-        image: ImageRaw::new(&atlases["mem"], 64),
+    let mem44 = MonoFont {
+        image: ImageRaw::new(&atlases["mem44"], 64),
         character_size: Size::new(4, 4),
         character_spacing: 0,
         baseline: 3,
         strikethrough: DecorationDimensions::new(2, 1),
         underline: DecorationDimensions::new(4, 1),
+        glyph_mapping: &embedded_graphics::mono_font::mapping::ASCII,
+    };
+    let mem45 = MonoFont {
+        image: ImageRaw::new(&atlases["mem45"], 64),
+        character_size: Size::new(4, 5),
+        character_spacing: 0,
+        baseline: 4,
+        strikethrough: DecorationDimensions::new(2, 1),
+        underline: DecorationDimensions::new(4, 1),
+        glyph_mapping: &embedded_graphics::mono_font::mapping::ASCII,
+    };
+    let mem55 = MonoFont {
+        image: ImageRaw::new(&atlases["mem55"], 80),
+        character_size: Size::new(5, 5),
+        character_spacing: 0,
+        baseline: 4,
+        strikethrough: DecorationDimensions::new(2, 1),
+        underline: DecorationDimensions::new(5, 1),
         glyph_mapping: &embedded_graphics::mono_font::mapping::ASCII,
     };
     let sixel = MonoFont {
@@ -132,7 +150,23 @@ pub(crate) fn get_fonts(atlases: &Atlases) -> Vec<Font<'_>> {
         },
         Font {
             family: "mem",
-            font: mem,
+            font: mem44,
+            license: License {
+                spdx: "AGPL-3.0",
+                url: "https://github.com/oidoid/mem/blob/main/license.text",
+            },
+        },
+        Font {
+            family: "mem",
+            font: mem45,
+            license: License {
+                spdx: "AGPL-3.0",
+                url: "https://github.com/oidoid/mem/blob/main/license.text",
+            },
+        },
+        Font {
+            family: "mem",
+            font: mem55,
             license: License {
                 spdx: "AGPL-3.0",
                 url: "https://github.com/oidoid/mem/blob/main/license.text",
@@ -172,7 +206,9 @@ pub(crate) fn load_atlases() -> Result<Atlases> {
     res.insert("ibm437r", load_atlas("ibm437r_8x8.png")?);
     res.insert("pico8", load_atlas("pico8_4x6.png")?);
     res.insert("profont", load_atlas("profont_5x10.png")?);
-    res.insert("mem", load_atlas("mem_4x4.png")?);
+    res.insert("mem44", load_atlas("mem_4x4.png")?);
+    res.insert("mem45", load_atlas("mem_4x5.png")?);
+    res.insert("mem55", load_atlas("mem_5x5.png")?);
     res.insert("sixel", load_atlas("sixel_1x6.png")?);
     res.insert("kenney11", load_atlas("kenney_11x14.png")?);
     res.insert("kenney16", load_atlas("kenney_16x16.png")?);

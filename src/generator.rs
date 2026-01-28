@@ -64,6 +64,7 @@ pub(crate) fn save_all_fonts(root: &Path) -> Result<usize> {
 fn dump_font(path: &Path, encoding_index: usize, font: &MonoFont) -> io::Result<()> {
     let mut file = std::fs::File::create(path)?;
     let f = &mut file;
+    assert_eq!(font.image.size().width % 8, 0);
     write_u8(f, 0x11)?;
     write_u8(f, encoding_index as u8)?;
     write_u8(f, font.character_size.width as u8)?;
@@ -119,6 +120,7 @@ impl DrawTarget for FileWrapper {
                 raw = 0;
             }
         }
+        assert_eq!(raw, 0);
         Ok(())
     }
 }
