@@ -72,7 +72,7 @@ pub(crate) fn get_fonts(atlases: &Atlases) -> Vec<Font<'_>> {
     };
     let profont = MonoFont {
         image: ImageRaw::new(&atlases["profont"], 80),
-        character_size: Size::new(5, 10),
+        character_size: Size::new(5, 9),
         character_spacing: 0,
         baseline: 9,
         strikethrough: DecorationDimensions::new(5, 1),
@@ -205,7 +205,7 @@ pub(crate) fn load_atlases() -> Result<Atlases> {
     res.insert("ibm437b", load_atlas("ibm437b_8x8.png")?);
     res.insert("ibm437r", load_atlas("ibm437r_8x8.png")?);
     res.insert("pico8", load_atlas("pico8_4x6.png")?);
-    res.insert("profont", load_atlas("profont_5x10.png")?);
+    res.insert("profont", load_atlas("profont_5x9.png")?);
     res.insert("mem44", load_atlas("mem_4x4.png")?);
     res.insert("mem45", load_atlas("mem_4x5.png")?);
     res.insert("mem55", load_atlas("mem_5x5.png")?);
