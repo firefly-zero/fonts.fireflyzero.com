@@ -1,7 +1,5 @@
 use embedded_graphics::mono_font::*;
 
-// TODO: replace copy-pasting with macros, maybe?
-
 static ASCII: &[MonoFont] = &[
     ascii::FONT_4X6,
     ascii::FONT_5X7,

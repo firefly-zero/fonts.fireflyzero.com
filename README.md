@@ -6,3 +6,10 @@ The source code for [fonts.fireflyzero.com](https://fonts.fireflyzero.com/), a w
 
 1. `cargo run`
 1. `firefox ./public/index.html`
+
+## Sources
+
+* <https://www.cl.cam.ac.uk/~mgk25/ucs-fonts.html#copyright>
+* <https://github.com/fcambus/spleen>
+* <https://github.com/farsil/ibmfonts>
+* <https://github.com/ha1tch/bdf-fonts>
