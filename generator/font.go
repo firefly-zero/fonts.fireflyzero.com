@@ -22,6 +22,22 @@ func handleBDFFile(fname string) error {
 		return fmt.Errorf("parse BDF font: %v", err)
 	}
 
+	img := makeAtlas(font)
+
+	outName := "public/atlases/" + path.Base(fname) + ".png"
+	out, err := os.Create(outName)
+	if err != nil {
+		return fmt.Errorf("open %s on write: %v", outName, err)
+	}
+	defer func() { _ = out.Close() }()
+	err = png.Encode(out, img)
+	if err != nil {
+		return fmt.Errorf("save PNG file: %v", err)
+	}
+	return nil
+}
+
+func makeAtlas(font *bdf.Font) *image.Alpha {
 	chars := []bdf.Character{}
 	charW := 0
 	charH := 0
@@ -50,16 +66,5 @@ func handleBDFFile(fname string) error {
 		)
 		draw.Draw(img, rect, src, src.Rect.Min, draw.Src)
 	}
-
-	outName := "public/atlases/" + path.Base(fname) + ".png"
-	out, err := os.Create(outName)
-	if err != nil {
-		return fmt.Errorf("open %s on write: %v", outName, err)
-	}
-	defer func() { _ = out.Close() }()
-	err = png.Encode(out, img)
-	if err != nil {
-		return fmt.Errorf("save PNG file: %v", err)
-	}
-	return nil
+	return img
 }
