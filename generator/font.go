@@ -37,7 +37,7 @@ func handleBDFFile(fname string) error {
 	}
 
 	imgW := charW * 16
-	imgH := charW * 32
+	imgH := charH * len(chars) / 16
 	img := image.NewAlpha(image.Rect(0, 0, imgW, imgH))
 
 	for i, ch := range chars {
@@ -45,10 +45,10 @@ func handleBDFFile(fname string) error {
 		rect := image.Rect(
 			charW*(i%16),
 			charH*(i/16),
-			src.Rect.Dx(),
-			src.Rect.Dy(),
+			imgW,
+			imgH,
 		)
-		draw.Draw(img, rect, src, image.Point{}, draw.Src)
+		draw.Draw(img, rect, src, src.Rect.Min, draw.Src)
 	}
 
 	outName := "public/atlases/" + path.Base(fname) + ".png"
