@@ -42,10 +42,7 @@ func makeAtlas(font *bdf.Font) *image.Alpha {
 	charW := 0
 	charH := 0
 	for r := '\x20'; r <= '\x7F'; r++ {
-		ch := font.CharMap[r]
-		if ch == nil {
-			ch = font.CharMap[font.DefaultChar]
-		}
+		ch := getChar(font, r)
 		chars = append(chars, *ch)
 		bbox := ch.Alpha.Rect
 		charW = max(charW, bbox.Dx())
@@ -67,4 +64,20 @@ func makeAtlas(font *bdf.Font) *image.Alpha {
 		draw.Draw(img, rect, src, src.Rect.Min, draw.Src)
 	}
 	return img
+}
+
+func getChar(font *bdf.Font, r rune) *bdf.Character {
+	ch := font.CharMap[r]
+	if ch != nil {
+		return ch
+	}
+	ch = font.CharMap[font.DefaultChar]
+	if ch != nil {
+		return ch
+	}
+	ch = font.CharMap['A']
+	if ch != nil {
+		return ch
+	}
+	return &font.Characters[0]
 }

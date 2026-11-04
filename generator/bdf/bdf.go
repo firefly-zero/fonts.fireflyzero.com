@@ -198,6 +198,9 @@ func Parse(data []byte) (*Font, error) {
 
 			case "STARTCHAR":
 				char++
+				if len(f.Characters)-1 < char {
+					f.Characters = append(f.Characters, Character{})
+				}
 				f.Characters[char].Name = components[1]
 			case "ENCODING":
 				code, err := strconv.Atoi(components[1])
