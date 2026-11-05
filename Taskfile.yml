@@ -2,11 +2,11 @@
 version: '3'
 
 tasks:
-  generate:
+  build:
     cmds:
       - rm -rf public
       - mkdir public
       - go run .
   default:
     cmds:
-      - task: generate
+      - task: build

@@ -1,4 +1,3 @@
-set -e
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-. "$HOME/.cargo/env"
-~/.cargo/bin/cargo run
+#!/bin/bash
+sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d
+./bin/task build
