@@ -6,7 +6,7 @@ import (
 	"image/draw"
 	"image/png"
 	"os"
-	"path"
+	"strings"
 
 	"github.com/firefly-zero/fonts.fireflyzero.com/generator/bdf"
 )
@@ -17,7 +17,11 @@ func Run() error {
 		return fmt.Errorf("open bdf dir: %v", err)
 	}
 	for _, file := range files {
-		err1 := handleBDFFile("bdf/" + file.Name())
+		name := file.Name()
+		if name == "HaxorNarrow-17.bdf" {
+			continue
+		}
+		err1 := handleBDFFile("bdf/" + name)
 		if err1 != nil {
 			return err1
 		}
@@ -38,7 +42,15 @@ func handleBDFFile(fname string) error {
 
 	img := makeAtlas(font)
 
-	outName := "public/atlases/" + path.Base(fname) + ".png"
+	family := getFamily(font)
+	suffix := getStyle(font)
+	fontName := fmt.Sprintf("%s-%dx%d%s", family, font.BBox.Width, font.BBox.Height, suffix)
+
+	outName := "public/mono/" + fontName + ".png"
+	_, err = os.Stat(outName)
+	if err == nil {
+		return fmt.Errorf("file already exists: %s", outName)
+	}
 	out, err := os.Create(outName)
 	if err != nil {
 		return fmt.Errorf("open %s on write: %v", outName, err)
@@ -94,4 +106,35 @@ func getChar(font *bdf.Font, r rune) *bdf.Character {
 		return ch
 	}
 	panic("character not found")
+}
+
+func getFamily(font *bdf.Font) string {
+	if font.Encoding == "ibm-437" {
+		return "ibm-437"
+	}
+	name := font.FamilyName
+	name = strings.Split(name, " ")[0]
+	name = strings.ToLower(name)
+	if name == "fixed" {
+		name = "ucs"
+	}
+	return name
+}
+
+func getStyle(font *bdf.Font) string {
+	if strings.ToLower(font.Weight) == "bold" {
+		return "b"
+	}
+	if font.FamilyName == "Haxor" && font.Weight == "Medium" {
+		return "b"
+	}
+	if font.FamilyName == "CGA" && !strings.Contains(font.Name, "Light") {
+		return "b"
+	}
+
+	slant := strings.ToUpper(font.Slant)
+	if slant == "I" || slant == "O" {
+		return "i"
+	}
+	return ""
 }

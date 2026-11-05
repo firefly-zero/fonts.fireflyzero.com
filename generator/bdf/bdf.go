@@ -21,6 +21,13 @@ type Character struct {
 	LowerPoint [2]int
 }
 
+type BBox struct {
+	Width  int
+	Height int
+	Dx     int
+	Dy     int
+}
+
 type Font struct {
 	// FONT: defines the font family and face names as an X logical font description.
 	Name string
@@ -32,6 +39,8 @@ type Font struct {
 	DPI [2]int
 	// SIZE [4]
 	BPP int
+	// FONTBOUNDINGBOX
+	BBox BBox
 	// FONT_ASCENT: how many pixels in height are above the baseline.
 	Ascent int
 	// FONT_DESCENT: how many pixels in height are below the baseline.
@@ -52,6 +61,10 @@ type Font struct {
 	//  - "OT" is other,
 	//  - and a number indicates polymorphic slant capability.
 	Slant string
+	// WEIGHT_NAME: the weight of this font.
+	//
+	// "Bold" and "Normal" are typical, though there is no set enumeration).
+	Weight string
 	// FOUNDRY: vendor or supplier of this font.
 	Foundry     string
 	Characters  []Character
@@ -116,10 +129,27 @@ scan:
 					return err
 				}
 			}
+		case "FONTBOUNDINGBOX":
+			f.BBox.Width, err = strconv.Atoi(components[1])
+			if err != nil {
+				return err
+			}
+			f.BBox.Height, err = strconv.Atoi(components[2])
+			if err != nil {
+				return err
+			}
+			f.BBox.Dx, err = strconv.Atoi(components[3])
+			if err != nil {
+				return err
+			}
+			f.BBox.Dy, err = strconv.Atoi(components[4])
+			if err != nil {
+				return err
+			}
 		case "CHARSET_REGISTRY":
-			registry = components[1]
+			registry = strings.Trim(components[1], `"`)
 		case "CHARSET_ENCODING":
-			encoding = components[1]
+			encoding = strings.Trim(components[1], `"`)
 		case "PIXEL_SIZE":
 			f.PixelSize, err = strconv.Atoi(components[1])
 			if err != nil {
@@ -146,11 +176,13 @@ scan:
 				return err
 			}
 		case "FAMILY_NAME":
-			f.FamilyName = components[1]
+			f.FamilyName = strings.Trim(components[1], `"`)
 		case "SLANT":
-			f.Slant = components[1]
+			f.Slant = strings.Trim(components[1], `"`)
+		case "WEIGHT_NAME":
+			f.Weight = strings.Trim(components[1], `"`)
 		case "FOUNDRY":
-			f.Foundry = components[1]
+			f.Foundry = strings.Trim(components[1], `"`)
 		case "DEFAULT_CHAR":
 			defaultChar, err = strconv.Atoi(components[1])
 			if err != nil {
