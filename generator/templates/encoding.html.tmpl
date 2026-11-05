@@ -1,6 +1,8 @@
+{{define "title"}}{{.Encoding.Title}} fonts for Firefly Zero{{end}}
+
 {{define "body"}}
   <h1 class="text-center">
-    <b>{{.Encoding.Emoji}} {{.Encoding.Title}}</b> fonts for <a href="https://fireflyzero.com/">Firefly Zero</a>
+    <a href="https://fireflyzero.com/" target="_blank">Firefly Zero</a> / <a href="..">Fonts</a> / {{.Encoding.Emoji}} {{.Encoding.Title}}
   </h1>
   <div class="row row-cols-1 row-cols-md-2 g-1">
     {{range .Fonts}}

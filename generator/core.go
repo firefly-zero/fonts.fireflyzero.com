@@ -1,6 +1,7 @@
 package generator
 
 import (
+	"cmp"
 	"embed"
 	"fmt"
 	"html/template"
@@ -8,6 +9,7 @@ import (
 	"image/draw"
 	"image/png"
 	"os"
+	"slices"
 	"strings"
 
 	"github.com/firefly-zero/fonts.fireflyzero.com/generator/bdf"
@@ -62,11 +64,23 @@ func Run() error {
 		fonts = append(fonts, *font)
 	}
 
+	slices.SortFunc(fonts, cmpFonts)
+
 	err = renderEncodingPage(encodings[0], fonts)
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+func cmpFonts(a, b Font) int {
+	if a.Width != b.Width {
+		return cmp.Compare(a.Width, b.Width)
+	}
+	if a.Height != b.Height {
+		return cmp.Compare(a.Height, b.Height)
+	}
+	return cmp.Compare(a.Family, b.Family)
 }
 
 func renderEncodingsPage() error {
@@ -197,6 +211,9 @@ func getFamily(font *bdf.Font) string {
 	name = strings.ToLower(name)
 	if name == "fixed" {
 		name = "ucs"
+	}
+	if name == "fixed4x6" {
+		name = "raccoon"
 	}
 	return name
 }
