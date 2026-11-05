@@ -36,7 +36,7 @@ func parseTemplate(name string) *template.Template {
 
 type Font struct {
 	Name      string
-	Family    string
+	Family    Family
 	Style     string
 	Width     int
 	Height    int
@@ -108,7 +108,7 @@ func cmpFonts(a, b Font) int {
 	if a.Height != b.Height {
 		return cmp.Compare(a.Height, b.Height)
 	}
-	return cmp.Compare(a.Family, b.Family)
+	return cmp.Compare(a.Family.Name, b.Family.Name)
 }
 
 func renderEncodingsPage() error {
@@ -187,7 +187,7 @@ func handleBDFFile(fname string) (*Font, error) {
 
 	info := Font{
 		Name:      fontName,
-		Family:    family,
+		Family:    families[family],
 		Style:     style,
 		Width:     assets.CharW,
 		Height:    assets.CharH,

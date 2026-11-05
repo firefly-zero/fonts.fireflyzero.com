@@ -6,7 +6,7 @@
           <ul class="list-unstyled">
             <li>
               <i class="fa-solid fa-layer-group fa-fw" title="family"></i>
-              {{ .Family }}
+              {{ .Family.Name }}
             </li>
             <li>
               <i class="fa-solid fa-up-right-and-down-left-from-center fa-fw" title="size"></i>
@@ -24,10 +24,18 @@
                 italic
               {{ end }}
             </li>
-            <li>
-              <i class="fa-solid fa-file fa-fw" title="license"></i>
-              ???
-            </li>
+            {{ if .Family.Author }}
+              <li>
+                <i class="fa-solid fa-copyright fa-fw" title="copyright owner"></i>
+                {{ .Family.Author }}
+              </li>
+            {{ end }}
+            {{ if .Family.License }}
+              <li>
+                <i class="fa-solid fa-gavel fa-fw" title="license"></i>
+                {{ .Family.License }}
+              </li>
+            {{ end }}
           </ul>
           <a
             href="{{.Name}}.fff"
