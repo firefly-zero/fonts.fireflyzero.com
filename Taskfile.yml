@@ -5,7 +5,7 @@ tasks:
   generate:
     cmds:
       - rm -rf public
-      - mkdir -p public/ascii
+      - mkdir public
       - go run .
   default:
     cmds:

@@ -71,9 +71,11 @@ func Run() error {
 
 	slices.SortFunc(fonts, cmpFonts)
 
-	err = renderEncodingPage(encodings[0], fonts)
-	if err != nil {
-		return err
+	for _, enc := range encodings {
+		err = renderEncodingPage(enc, fonts)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -162,6 +164,14 @@ func handleBDFFile(fname string) (*Font, error) {
 		return nil, err
 	}
 
+	for _, enc := range encodings[1:] {
+		assets := makeAssets(enc, font)
+		err = saveAssets(enc, fontName, assets)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	info := Font{
 		Name:   fontName,
 		Family: family,
@@ -173,8 +183,13 @@ func handleBDFFile(fname string) (*Font, error) {
 }
 
 func saveAssets(enc Encoding, fontName string, assets Assets) error {
-	outName := "public/" + enc.Slug + "/" + fontName + ".png"
-	_, err := os.Stat(outName)
+	dirName := "public/" + enc.Slug
+	err := os.MkdirAll(dirName, os.ModePerm)
+	if err != nil {
+		return fmt.Errorf("create dir: %v", err)
+	}
+	outName := dirName + "/" + fontName + ".png"
+	_, err = os.Stat(outName)
 	if err == nil {
 		return fmt.Errorf("file already exists: %s", outName)
 	}
@@ -201,6 +216,12 @@ func makeAssets(enc Encoding, font *bdf.Font) Assets {
 	charW := 0
 	charH := 0
 	for r := '\x20'; r <= '\x7F'; r++ {
+		ch := getChar(font, r)
+		chars = append(chars, *ch)
+		charW = max(charW, ch.Alpha.Rect.Dx())
+		charH = max(charH, ch.Alpha.Rect.Dy())
+	}
+	for _, r := range enc.Chars {
 		ch := getChar(font, r)
 		chars = append(chars, *ch)
 		charW = max(charW, ch.Alpha.Rect.Dx())
