@@ -129,7 +129,7 @@ func handleBDFFile(fname string) (*Font, error) {
 		font.BBox.Width++
 	}
 
-	img := makeAtlas(font)
+	assets := makeAssets(font)
 
 	family := getFamily(font)
 	style := getStyle(font)
@@ -145,7 +145,7 @@ func handleBDFFile(fname string) (*Font, error) {
 		return nil, fmt.Errorf("open %s on write: %v", outName, err)
 	}
 	defer func() { _ = out.Close() }()
-	err = png.Encode(out, img)
+	err = png.Encode(out, assets.Atlas)
 	if err != nil {
 		return nil, fmt.Errorf("save PNG file: %v", err)
 	}
@@ -160,7 +160,11 @@ func handleBDFFile(fname string) (*Font, error) {
 	return &info, nil
 }
 
-func makeAtlas(font *bdf.Font) *image.Alpha {
+type Assets struct {
+	Atlas *image.Alpha
+}
+
+func makeAssets(font *bdf.Font) Assets {
 	chars := []bdf.Character{}
 	for r := '\x20'; r <= '\x7F'; r++ {
 		ch := getChar(font, r)
@@ -169,21 +173,24 @@ func makeAtlas(font *bdf.Font) *image.Alpha {
 
 	charW := font.BBox.Width
 	charH := font.BBox.Height
-	imgW := charW * 16
-	imgH := charH * len(chars) / 16
+	imgW := charW*16 + 2
+	imgH := charH*len(chars)/16 + font.Descent + 2
 	img := image.NewAlpha(image.Rect(0, 0, imgW, imgH))
 
 	for i, ch := range chars {
 		src := ch.Alpha
+		ox := max(ch.LowerPoint[0], 0)
 		rect := image.Rect(
-			charW*(i%16),
-			charH*(i/16)+(charH-ch.Alpha.Bounds().Dy()),
+			charW*(i%16)+ox,
+			charH*(i/16)+(charH-ch.Alpha.Bounds().Dy())-ch.LowerPoint[1],
 			imgW,
 			imgH,
 		)
 		draw.Draw(img, rect, src, src.Rect.Min, draw.Src)
 	}
-	return img
+	return Assets{
+		Atlas: img,
+	}
 }
 
 func getChar(font *bdf.Font, r rune) *bdf.Character {
