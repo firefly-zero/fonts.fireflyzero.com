@@ -125,15 +125,12 @@ func handleBDFFile(fname string) (*Font, error) {
 	if err != nil {
 		return nil, fmt.Errorf("parse BDF font: %v", err)
 	}
-	if font.Foundry == "Raccoon" {
-		font.BBox.Width++
-	}
 
 	assets := makeAssets(font)
 
 	family := getFamily(font)
 	style := getStyle(font)
-	fontName := fmt.Sprintf("%s-%dx%d%s", family, font.BBox.Width, font.BBox.Height, style)
+	fontName := fmt.Sprintf("%s-%dx%d%s", family, assets.CharW, assets.CharH, style)
 
 	outName := "public/ascii/" + fontName + ".png"
 	_, err = os.Stat(outName)
@@ -154,25 +151,38 @@ func handleBDFFile(fname string) (*Font, error) {
 		Name:   fontName,
 		Family: family,
 		Style:  style,
-		Width:  font.BBox.Width,
-		Height: font.BBox.Height,
+		Width:  assets.CharW,
+		Height: assets.CharH,
 	}
 	return &info, nil
 }
 
 type Assets struct {
 	Atlas *image.Alpha
+	CharW int
+	CharH int
 }
 
 func makeAssets(font *bdf.Font) Assets {
 	chars := []bdf.Character{}
+	charW := 0
+	charH := 0
 	for r := '\x20'; r <= '\x7F'; r++ {
 		ch := getChar(font, r)
 		chars = append(chars, *ch)
+		charW = max(charW, ch.Alpha.Rect.Dx())
+		charH = max(charH, ch.Alpha.Rect.Dy())
+	}
+	if charW >= font.BBox.Width-2 {
+		charW = font.BBox.Width
+	}
+	if charH >= font.BBox.Height-2 {
+		charH = font.BBox.Height
+	}
+	if font.Foundry == "Raccoon" {
+		charW++
 	}
 
-	charW := font.BBox.Width
-	charH := font.BBox.Height
 	imgW := charW*16 + 2
 	imgH := charH*len(chars)/16 + font.Descent + 2
 	img := image.NewAlpha(image.Rect(0, 0, imgW, imgH))
@@ -190,6 +200,8 @@ func makeAssets(font *bdf.Font) Assets {
 	}
 	return Assets{
 		Atlas: img,
+		CharW: charW,
+		CharH: charH,
 	}
 }
 
