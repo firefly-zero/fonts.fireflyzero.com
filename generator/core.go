@@ -125,6 +125,12 @@ func handleBDFFile(fname string) (*Font, error) {
 	if err != nil {
 		return nil, fmt.Errorf("parse BDF font: %v", err)
 	}
+	if font.Foundry == "Raccoon" {
+		font.BBox.Width++
+	}
+	if font.FamilyName == "Logisoso" {
+		font.BBox.Width = 46
+	}
 
 	img := makeAtlas(font)
 
@@ -159,16 +165,13 @@ func handleBDFFile(fname string) (*Font, error) {
 
 func makeAtlas(font *bdf.Font) *image.Alpha {
 	chars := []bdf.Character{}
-	charW := 0
-	charH := 0
 	for r := '\x20'; r <= '\x7F'; r++ {
 		ch := getChar(font, r)
 		chars = append(chars, *ch)
-		bbox := ch.Alpha.Rect
-		charW = max(charW, bbox.Dx())
-		charH = max(charH, bbox.Dy())
 	}
 
+	charW := font.BBox.Width
+	charH := font.BBox.Height
 	imgW := charW * 16
 	imgH := charH * len(chars) / 16
 	img := image.NewAlpha(image.Rect(0, 0, imgW, imgH))
