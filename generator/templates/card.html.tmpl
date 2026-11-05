@@ -1,0 +1,53 @@
+{{define "card"}}
+  <div class="card h-100">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <div class="card-body">
+          <ul class="list-unstyled">
+            <li>
+              <i class="fa-solid fa-layer-group fa-fw" title="family"></i>
+              {{ .Family }}
+            </li>
+            <li>
+              <i class="fa-solid fa-up-right-and-down-left-from-center fa-fw" title="size"></i>
+              {{ .Width }}x{{ .Height }}
+            </li>
+            <li>
+              <i class="fa-solid fa-italic fa-fw" title="style"></i>
+              {{ if eq .Style "" }}
+                regular
+              {{ end }}
+              {{ if eq .Style "b" }}
+                bold
+              {{ end }}
+              {{ if eq .Style "i" }}
+                italic
+              {{ end }}
+            </li>
+            <li>
+              <i class="fa-solid fa-file fa-fw" title="license"></i>
+              ???
+            </li>
+          </ul>
+          <a
+            href="{{.Name}}.fff"
+            class="btn btn-primary"
+            download
+          >
+            <i class="fa-solid fa-download"></i>
+            download
+          </a>
+        </div>
+      </div>
+      <div class="col">
+        <img
+          src="{{.Name}}.png"
+          class="preview rounded-end"
+          style="max-width: 100%"
+          data-bs-toggle="modal"
+          data-bs-target="#modal-{{.Name}}"
+        >
+      </div>
+    </div>
+  </div>
+{{end}}

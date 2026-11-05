@@ -16,8 +16,28 @@ import (
 var (
 	//go:embed templates/*
 	templatesFiles embed.FS
-	tmplTemplates  = template.Must(template.New("root").ParseFS(templatesFiles, "templates/*.html.tmpl"))
+	tmplTemplates  = map[string]*template.Template{
+		"index":    parseTemplate("index"),
+		"encoding": parseTemplate("encoding"),
+	}
 )
+
+func parseTemplate(name string) *template.Template {
+	return template.Must(template.New("root").ParseFS(
+		templatesFiles,
+		"templates/base.html.tmpl",
+		"templates/card.html.tmpl",
+		"templates/"+name+".html.tmpl",
+	))
+}
+
+type Font struct {
+	Name   string
+	Family string
+	Style  string
+	Width  int
+	Height int
+}
 
 func Run() error {
 	err := renderEncodingsPage()
@@ -29,15 +49,22 @@ func Run() error {
 	if err != nil {
 		return fmt.Errorf("open bdf dir: %v", err)
 	}
+	fonts := make([]Font, 0, len(files))
 	for _, file := range files {
 		name := file.Name()
 		if name == "HaxorNarrow-17.bdf" {
 			continue
 		}
-		err1 := handleBDFFile("bdf/" + name)
-		if err1 != nil {
-			return err1
+		font, err := handleBDFFile("bdf/" + name)
+		if err != nil {
+			return err
 		}
+		fonts = append(fonts, *font)
+	}
+
+	err = renderEncodingPage(encodings[0], fonts)
+	if err != nil {
+		return err
 	}
 	return nil
 }
@@ -49,22 +76,40 @@ func renderEncodingsPage() error {
 		return fmt.Errorf("create %s: %v", page, err)
 	}
 	defer func() { _ = file.Close() }()
-	err = tmplTemplates.ExecuteTemplate(file, page+".tmpl", encodings)
+	err = tmplTemplates["index"].ExecuteTemplate(file, page+".tmpl", encodings)
 	if err != nil {
 		return fmt.Errorf("render %s: %v", page, err)
 	}
 	return nil
 }
 
-func handleBDFFile(fname string) error {
+func renderEncodingPage(enc Encoding, fonts []Font) error {
+	outName := fmt.Sprintf("public/%s/index.html", enc.Slug)
+	file, err := os.Create(outName)
+	if err != nil {
+		return fmt.Errorf("create %s: %v", outName, err)
+	}
+	defer func() { _ = file.Close() }()
+	data := map[string]any{
+		"Encoding": enc,
+		"Fonts":    fonts,
+	}
+	err = tmplTemplates["encoding"].ExecuteTemplate(file, "encoding.html.tmpl", data)
+	if err != nil {
+		return fmt.Errorf("render %s: %v", outName, err)
+	}
+	return nil
+}
+
+func handleBDFFile(fname string) (*Font, error) {
 	raw, err := os.ReadFile(fname)
 	if err != nil {
-		return fmt.Errorf("read BDF file: %v", err)
+		return nil, fmt.Errorf("read BDF file: %v", err)
 	}
 
 	font, err := bdf.Parse(raw)
 	if err != nil {
-		return fmt.Errorf("parse BDF font: %v", err)
+		return nil, fmt.Errorf("parse BDF font: %v", err)
 	}
 
 	img := makeAtlas(font)
@@ -76,18 +121,26 @@ func handleBDFFile(fname string) error {
 	outName := "public/ascii/" + fontName + ".png"
 	_, err = os.Stat(outName)
 	if err == nil {
-		return fmt.Errorf("file already exists: %s", outName)
+		return nil, fmt.Errorf("file already exists: %s", outName)
 	}
 	out, err := os.Create(outName)
 	if err != nil {
-		return fmt.Errorf("open %s on write: %v", outName, err)
+		return nil, fmt.Errorf("open %s on write: %v", outName, err)
 	}
 	defer func() { _ = out.Close() }()
 	err = png.Encode(out, img)
 	if err != nil {
-		return fmt.Errorf("save PNG file: %v", err)
+		return nil, fmt.Errorf("save PNG file: %v", err)
 	}
-	return nil
+
+	info := Font{
+		Name:   fontName,
+		Family: family,
+		Style:  style,
+		Width:  font.BBox.Width,
+		Height: font.BBox.Height,
+	}
+	return &info, nil
 }
 
 func makeAtlas(font *bdf.Font) *image.Alpha {
