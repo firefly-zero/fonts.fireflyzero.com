@@ -213,7 +213,7 @@ func saveAssets(enc Encoding, fontName string, assets Assets) error {
 	return nil
 }
 
-func savePNG(outPath string, img *image.Alpha) error {
+func savePNG(outPath string, img image.Image) error {
 	_, err := os.Stat(outPath)
 	if err == nil {
 		return fmt.Errorf("file already exists: %s", outPath)
@@ -231,8 +231,8 @@ func savePNG(outPath string, img *image.Alpha) error {
 }
 
 type Assets struct {
-	Atlas   *image.Alpha
-	Pangram *image.Alpha
+	Atlas   image.Image
+	Pangram image.Image
 	CharW   int
 	CharH   int
 }
@@ -294,7 +294,7 @@ func makeAssets(enc Encoding, font *bdf.Font) *Assets {
 
 	return &Assets{
 		Atlas:   img,
-		Pangram: pg,
+		Pangram: pg.SubImage(image.Rect(0, 0, x, pgH)),
 		CharW:   charW,
 		CharH:   charH,
 	}
