@@ -22,15 +22,38 @@ type Character struct {
 }
 
 type Font struct {
-	Name        string
-	Size        int
-	PixelSize   int
-	DPI         [2]int
-	BPP         int
-	Ascent      int
-	Descent     int
-	CapHeight   int
-	XHeight     int
+	// FONT: defines the font family and face names as an X logical font description.
+	Name string
+	// SIZE [1]: point size of the glyphs.
+	Size int
+	// PIXEL_SIZE
+	PixelSize int
+	// SIZE [2, 3]: x and y resolutions of the device for which the font is intended.
+	DPI [2]int
+	// SIZE [4]
+	BPP int
+	// FONT_ASCENT: how many pixels in height are above the baseline.
+	Ascent int
+	// FONT_DESCENT: how many pixels in height are below the baseline.
+	Descent int
+	// CAP_HEIGHT: the height above the baseline of a capital letter.
+	CapHeight int
+	// X_HEIGHT: the height above the baseline of a lower-case "x".
+	XHeight int
+	// FAMILY_NAME: the font family name.
+	FamilyName string
+	// SLANT:
+	//
+	//  - "R" is roman,
+	//  - "I" is italic,
+	//  - "O" is oblique,
+	//  - "RI" is reverse italic,
+	//  - "RO" is reverse oblique,
+	//  - "OT" is other,
+	//  - and a number indicates polymorphic slant capability.
+	Slant string
+	// FOUNDRY: vendor or supplier of this font.
+	Foundry     string
 	Characters  []Character
 	CharMap     map[rune]*Character
 	Encoding    string
@@ -122,6 +145,12 @@ scan:
 			if err != nil {
 				return err
 			}
+		case "FAMILY_NAME":
+			f.FamilyName = components[1]
+		case "SLANT":
+			f.Slant = components[1]
+		case "FOUNDRY":
+			f.Foundry = components[1]
 		case "DEFAULT_CHAR":
 			defaultChar, err = strconv.Atoi(components[1])
 			if err != nil {
