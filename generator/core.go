@@ -11,6 +11,20 @@ import (
 	"github.com/firefly-zero/fonts.fireflyzero.com/generator/bdf"
 )
 
+func Run() error {
+	files, err := os.ReadDir("bdf")
+	if err != nil {
+		return fmt.Errorf("open bdf dir: %v", err)
+	}
+	for _, file := range files {
+		err1 := handleBDFFile("bdf/" + file.Name())
+		if err1 != nil {
+			return err1
+		}
+	}
+	return nil
+}
+
 func handleBDFFile(fname string) error {
 	raw, err := os.ReadFile(fname)
 	if err != nil {
@@ -75,9 +89,9 @@ func getChar(font *bdf.Font, r rune) *bdf.Character {
 	if ch != nil {
 		return ch
 	}
-	ch = font.CharMap['A']
+	ch = font.CharMap['?']
 	if ch != nil {
 		return ch
 	}
-	return &font.Characters[0]
+	panic("character not found")
 }
