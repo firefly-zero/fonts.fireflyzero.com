@@ -1,96 +1,95 @@
 package generator
 
 type Encoding struct {
-	id    uint8
-	slug  string
-	name  string
-	emoji string
-	chars []rune
+	ID    uint8
+	Slug  string
+	Title string
+	Emoji string
 }
 
 var encodings = []Encoding{
 	{
-		id:    0x0,
-		slug:  "ascii",
-		name:  "ASCII",
-		emoji: "🇺🇸",
+		ID:    0x0,
+		Slug:  "ascii",
+		Title: "ASCII",
+		Emoji: "🇺🇸",
 	},
 	{
-		id:    0x1,
-		slug:  "iso_8859_1",
-		name:  "Latin-1, Western European.",
-		emoji: "🇵🇹",
+		ID:    0x1,
+		Slug:  "iso_8859_1",
+		Title: "Latin-1, Western European",
+		Emoji: "🇵🇹",
 	},
 	{
-		id:    0x2,
-		slug:  "iso_8859_2",
-		name:  "Latin-2, Central European.",
-		emoji: "🇩🇪",
+		ID:    0x2,
+		Slug:  "iso_8859_2",
+		Title: "Latin-2, Central European",
+		Emoji: "🇩🇪",
 	},
 	{
-		id:    0x3,
-		slug:  "iso_8859_3",
-		name:  "Latin-3, South European.",
-		emoji: "🇲🇹",
+		ID:    0x3,
+		Slug:  "iso_8859_3",
+		Title: "Latin-3, South European",
+		Emoji: "🇲🇹",
 	},
 	{
-		id:    0x4,
-		slug:  "iso_8859_4",
-		name:  "Latin-4, North European.",
-		emoji: "🇪🇪",
+		ID:    0x4,
+		Slug:  "iso_8859_4",
+		Title: "Latin-4, North European",
+		Emoji: "🇪🇪",
 	},
 	{
-		id:    0x5,
-		slug:  "iso_8859_9",
-		name:  "Latin-5, Turkish.",
-		emoji: "🇹🇷",
+		ID:    0x5,
+		Slug:  "iso_8859_9",
+		Title: "Latin-5, Turkish",
+		Emoji: "🇹🇷",
 	},
 	{
-		id:    0x6,
-		slug:  "iso_8859_10",
-		name:  "Latin-6, Nordic.",
-		emoji: "🇳🇴",
+		ID:    0x6,
+		Slug:  "iso_8859_10",
+		Title: "Latin-6, Nordic",
+		Emoji: "🇳🇴",
 	},
 	{
-		id:    0x7,
-		slug:  "iso_8859_13",
-		name:  "Latin-7, Baltic Rim.",
-		emoji: "🇵🇱",
+		ID:    0x7,
+		Slug:  "iso_8859_13",
+		Title: "Latin-7, Baltic Rim",
+		Emoji: "🇵🇱",
 	},
 	{
-		id:    0x8,
-		slug:  "iso_8859_14",
-		name:  "Latin-8, Celtic.",
-		emoji: "🇮🇪",
+		ID:    0x8,
+		Slug:  "iso_8859_14",
+		Title: "Latin-8, Celtic",
+		Emoji: "🇮🇪",
 	},
 	{
-		id:    0x9,
-		slug:  "iso_8859_15",
-		name:  "Latin-9 (revised Latin-1).",
-		emoji: "🇵🇹",
+		ID:    0x9,
+		Slug:  "iso_8859_15",
+		Title: "Latin-9 (revised Latin-1)",
+		Emoji: "🇵🇹",
 	},
 	{
-		id:    0xA,
-		slug:  "iso_8859_16",
-		name:  "Latin-10: South-East European.",
-		emoji: "🇷🇴",
+		ID:    0xA,
+		Slug:  "iso_8859_16",
+		Title: "Latin-10: South-East European",
+		Emoji: "🇷🇴",
 	},
 	{
-		id:    0xB,
-		slug:  "iso_8859_5",
-		name:  "Latin/Cyrillic.",
-		emoji: "🇷🇺",
+		ID:    0xB,
+		Slug:  "iso_8859_5",
+		Title: "Latin/Cyrillic",
+		Emoji: "🇷🇺",
 	},
 	{
-		id:    0xC,
-		slug:  "iso_8859_7",
-		name:  "Latin/Greek.",
-		emoji: "🇬🇷",
+		ID:    0xC,
+		Slug:  "iso_8859_7",
+		Title: "Latin/Greek",
+		Emoji: "🇬🇷",
 	},
 	{
-		id:    0xD,
-		slug:  "jis_x0201",
-		name:  "Japanese katakana(halfwidth).",
-		emoji: "🇯🇵",
+		ID:    0xD,
+		Slug:  "jis_x0201",
+		Title: "Japanese katakana(halfwidth)",
+		Emoji: "🇯🇵",
 	},
 }

@@ -1,7 +1,9 @@
 package generator
 
 import (
+	"embed"
 	"fmt"
+	"html/template"
 	"image"
 	"image/draw"
 	"image/png"
@@ -11,7 +13,18 @@ import (
 	"github.com/firefly-zero/fonts.fireflyzero.com/generator/bdf"
 )
 
+var (
+	//go:embed templates/*
+	templatesFiles embed.FS
+	tmplTemplates  = template.Must(template.New("root").ParseFS(templatesFiles, "templates/*.html.tmpl"))
+)
+
 func Run() error {
+	err := renderEncodingsPage()
+	if err != nil {
+		return err
+	}
+
 	files, err := os.ReadDir("bdf")
 	if err != nil {
 		return fmt.Errorf("open bdf dir: %v", err)
@@ -25,6 +38,20 @@ func Run() error {
 		if err1 != nil {
 			return err1
 		}
+	}
+	return nil
+}
+
+func renderEncodingsPage() error {
+	page := "index.html"
+	file, err := os.Create("public/" + page)
+	if err != nil {
+		return fmt.Errorf("create %s: %v", page, err)
+	}
+	defer func() { _ = file.Close() }()
+	err = tmplTemplates.ExecuteTemplate(file, page+".tmpl", encodings)
+	if err != nil {
+		return fmt.Errorf("render %s: %v", page, err)
 	}
 	return nil
 }
@@ -43,10 +70,10 @@ func handleBDFFile(fname string) error {
 	img := makeAtlas(font)
 
 	family := getFamily(font)
-	suffix := getStyle(font)
-	fontName := fmt.Sprintf("%s-%dx%d%s", family, font.BBox.Width, font.BBox.Height, suffix)
+	style := getStyle(font)
+	fontName := fmt.Sprintf("%s-%dx%d%s", family, font.BBox.Width, font.BBox.Height, style)
 
-	outName := "public/mono/" + fontName + ".png"
+	outName := "public/ascii/" + fontName + ".png"
 	_, err = os.Stat(outName)
 	if err == nil {
 		return fmt.Errorf("file already exists: %s", outName)

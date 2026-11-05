@@ -13,3 +13,4 @@ The source code for [fonts.fireflyzero.com](https://fonts.fireflyzero.com/), a w
 * <https://github.com/fcambus/spleen>
 * <https://github.com/farsil/ibmfonts>
 * <https://github.com/ha1tch/bdf-fonts>
+* <https://github.com/molarmanful/bited>

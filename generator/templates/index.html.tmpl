@@ -1,0 +1,16 @@
+{{define "body"}}
+  <h1 class="text-center">
+    Fonts for <a href="https://fireflyzero.com/">Firefly Zero</a>
+  </h1>
+  <div class="row row-cols-2 row-cols-md-4 g-2">
+    {{range .}}
+      <div class="col">
+        <a href="{{ .Slug }}" class="btn text-start w-100 h-100">
+          {{ .Emoji }} {{ .Title }}
+        </a>
+      </div>
+    {{end}}
+  </div>
+{{end}}
+
+{{template "base" .}}
