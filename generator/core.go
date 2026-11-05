@@ -35,11 +35,12 @@ func parseTemplate(name string) *template.Template {
 }
 
 type Font struct {
-	Name   string
-	Family string
-	Style  string
-	Width  int
-	Height int
+	Name      string
+	Family    string
+	Style     string
+	Width     int
+	Height    int
+	Encodings map[string]bool
 }
 
 func Run() error {
@@ -72,7 +73,7 @@ func Run() error {
 	slices.SortFunc(fonts, cmpFonts)
 
 	for _, enc := range encodings {
-		err = renderEncodingPage(enc, fonts)
+		err = renderEncodingPage(enc, filterFonts(enc, fonts))
 		if err != nil {
 			return err
 		}
@@ -124,6 +125,13 @@ func renderEncodingsPage() error {
 	return nil
 }
 
+func filterFonts(enc Encoding, fonts []Font) []Font {
+	fonts = slices.Clone(fonts)
+	return slices.DeleteFunc(fonts, func(f Font) bool {
+		return !f.Encodings[enc.Slug]
+	})
+}
+
 func renderEncodingPage(enc Encoding, fonts []Font) error {
 	outName := fmt.Sprintf("public/%s/index.html", enc.Slug)
 	file, err := os.Create(outName)
@@ -159,25 +167,31 @@ func handleBDFFile(fname string) (*Font, error) {
 	style := getStyle(font)
 	fontName := fmt.Sprintf("%s-%dx%d%s", family, assets.CharW, assets.CharH, style)
 
-	err = saveAssets(encodings[0], fontName, assets)
+	err = saveAssets(encodings[0], fontName, *assets)
 	if err != nil {
 		return nil, err
 	}
 
+	found := map[string]bool{"ascii": true}
 	for _, enc := range encodings[1:] {
 		assets := makeAssets(enc, font)
-		err = saveAssets(enc, fontName, assets)
+		if assets == nil {
+			continue
+		}
+		found[enc.Slug] = true
+		err = saveAssets(enc, fontName, *assets)
 		if err != nil {
 			return nil, err
 		}
 	}
 
 	info := Font{
-		Name:   fontName,
-		Family: family,
-		Style:  style,
-		Width:  assets.CharW,
-		Height: assets.CharH,
+		Name:      fontName,
+		Family:    family,
+		Style:     style,
+		Width:     assets.CharW,
+		Height:    assets.CharH,
+		Encodings: found,
 	}
 	return &info, nil
 }
@@ -211,7 +225,7 @@ type Assets struct {
 	CharH int
 }
 
-func makeAssets(enc Encoding, font *bdf.Font) Assets {
+func makeAssets(enc Encoding, font *bdf.Font) *Assets {
 	chars := []bdf.Character{}
 	charW := 0
 	charH := 0
@@ -221,12 +235,20 @@ func makeAssets(enc Encoding, font *bdf.Font) Assets {
 		charW = max(charW, ch.Alpha.Rect.Dx())
 		charH = max(charH, ch.Alpha.Rect.Dy())
 	}
+	nFound := 0
 	for _, r := range enc.Chars {
 		ch := getChar(font, r)
+		if r == ch.Encoding {
+			nFound++
+		}
 		chars = append(chars, *ch)
 		charW = max(charW, ch.Alpha.Rect.Dx())
 		charH = max(charH, ch.Alpha.Rect.Dy())
 	}
+	if len(enc.Chars) > 10 && float32(nFound)/float32(len(enc.Chars)) < .5 {
+		return nil
+	}
+
 	if charW >= font.BBox.Width-2 {
 		charW = font.BBox.Width
 	}
@@ -253,7 +275,7 @@ func makeAssets(enc Encoding, font *bdf.Font) Assets {
 		draw.Draw(img, rect, src, src.Rect.Min, draw.Src)
 	}
 
-	return Assets{
+	return &Assets{
 		Atlas: img,
 		CharW: charW,
 		CharH: charH,
