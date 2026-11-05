@@ -12,6 +12,7 @@ import (
 	"os"
 	"slices"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/firefly-zero/fonts.fireflyzero.com/generator/bdf"
 )
@@ -201,17 +202,28 @@ func saveAssets(enc Encoding, fontName string, assets Assets) error {
 	if err != nil {
 		return fmt.Errorf("create dir: %v", err)
 	}
-	outName := dirName + "/" + fontName + ".png"
-	_, err = os.Stat(outName)
-	if err == nil {
-		return fmt.Errorf("file already exists: %s", outName)
-	}
-	out, err := os.Create(outName)
+	err = savePNG(dirName+"/"+fontName+"-atlas.png", assets.Atlas)
 	if err != nil {
-		return fmt.Errorf("open %s on write: %v", outName, err)
+		return err
+	}
+	err = savePNG(dirName+"/"+fontName+"-pangram.png", assets.Pangram)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func savePNG(outPath string, img *image.Alpha) error {
+	_, err := os.Stat(outPath)
+	if err == nil {
+		return fmt.Errorf("file already exists: %s", outPath)
+	}
+	out, err := os.Create(outPath)
+	if err != nil {
+		return fmt.Errorf("open %s on write: %v", outPath, err)
 	}
 	defer func() { _ = out.Close() }()
-	err = png.Encode(out, assets.Atlas)
+	err = png.Encode(out, img)
 	if err != nil {
 		return fmt.Errorf("save PNG file: %v", err)
 	}
@@ -219,9 +231,10 @@ func saveAssets(enc Encoding, fontName string, assets Assets) error {
 }
 
 type Assets struct {
-	Atlas *image.Alpha
-	CharW int
-	CharH int
+	Atlas   *image.Alpha
+	Pangram *image.Alpha
+	CharW   int
+	CharH   int
 }
 
 func makeAssets(enc Encoding, font *bdf.Font) *Assets {
@@ -263,22 +276,40 @@ func makeAssets(enc Encoding, font *bdf.Font) *Assets {
 	imgH := charH*len(chars)/16 + font.Descent + 2
 	img := image.NewAlpha(image.Rect(0, 0, imgW, imgH))
 	for i, ch := range chars {
-		src := ch.Alpha
-		ox := max(ch.LowerPoint[0], 0)
-		rect := image.Rect(
-			charW*(i%16)+ox,
-			charH*(i/16)+(charH-ch.Alpha.Bounds().Dy())-ch.LowerPoint[1],
-			imgW,
-			imgH,
-		)
-		draw.Draw(img, rect, src, src.Rect.Min, draw.Src)
+		x := charW * (i % 16)
+		y := charH*(i/16) + (charH - ch.Alpha.Bounds().Dy())
+		drawCharAt(img, ch, x, y)
+	}
+
+	// Render pangram: PNG image with a real sentence (using as many letters as possible).
+	pgW := utf8.RuneCountInString(enc.Pangram)*charW + 4
+	pgH := charH + font.Descent + 2
+	pg := image.NewAlpha(image.Rect(0, 0, pgW, pgH))
+	x := 2
+	for _, r := range enc.Pangram {
+		ch := getChar(font, r)
+		drawCharAt(pg, *ch, x, (charH - ch.Alpha.Bounds().Dy()))
+		x += ch.Advance[0]
 	}
 
 	return &Assets{
-		Atlas: img,
-		CharW: charW,
-		CharH: charH,
+		Atlas:   img,
+		Pangram: pg,
+		CharW:   charW,
+		CharH:   charH,
 	}
+}
+
+func drawCharAt(img *image.Alpha, ch bdf.Character, x, y int) {
+	src := ch.Alpha
+	ox := max(ch.LowerPoint[0], 0)
+	rect := image.Rect(
+		x+ox,
+		y-ch.LowerPoint[1],
+		img.Rect.Dx(),
+		img.Rect.Dy(),
+	)
+	draw.Draw(img, rect, src, src.Rect.Min, draw.Src)
 }
 
 func getChar(font *bdf.Font, r rune) *bdf.Character {

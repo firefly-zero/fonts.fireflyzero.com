@@ -106,6 +106,6 @@ var encodings = []Encoding{
 		Slug:    "jis_x0201",
 		Title:   "Japanese katakana (halfwidth)",
 		Emoji:   "🇯🇵",
-		Pangram: "イロハニホヘトチリヌルヲワカヨタレソツネナ",
+		Pangram: "The quick brown fox jumps over the lazy dog.", // TODO
 	},
 }
