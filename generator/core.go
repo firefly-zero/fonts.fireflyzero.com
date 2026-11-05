@@ -128,9 +128,6 @@ func handleBDFFile(fname string) (*Font, error) {
 	if font.Foundry == "Raccoon" {
 		font.BBox.Width++
 	}
-	if font.FamilyName == "Logisoso" {
-		font.BBox.Width = 46
-	}
 
 	img := makeAtlas(font)
 
@@ -180,7 +177,7 @@ func makeAtlas(font *bdf.Font) *image.Alpha {
 		src := ch.Alpha
 		rect := image.Rect(
 			charW*(i%16),
-			charH*(i/16),
+			charH*(i/16)+(charH-ch.Alpha.Bounds().Dy()),
 			imgW,
 			imgH,
 		)
