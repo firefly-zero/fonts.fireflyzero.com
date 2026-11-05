@@ -102,11 +102,10 @@ func loadEncodings() error {
 }
 
 func cmpFonts(a, b Font) int {
-	if a.Width != b.Width {
-		return cmp.Compare(a.Width, b.Width)
-	}
-	if a.Height != b.Height {
-		return cmp.Compare(a.Height, b.Height)
+	apx := a.Width * a.Height
+	bpx := b.Width * b.Height
+	if apx != bpx {
+		return cmp.Compare(apx, bpx)
 	}
 	return cmp.Compare(a.Family.Name, b.Family.Name)
 }

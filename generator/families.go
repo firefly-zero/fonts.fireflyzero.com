@@ -47,8 +47,8 @@ var families = map[string]Family{
 		Author:  "Adobe",
 		License: "",
 	},
-	"ibm": {
-		Name:    "ibm",
+	"ibm-437": {
+		Name:    "ibm-437",
 		Author:  "IBM",
 		License: "",
 	},
