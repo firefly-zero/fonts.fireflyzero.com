@@ -5,6 +5,7 @@ type Encoding struct {
 	Slug  string
 	Title string
 	Emoji string
+	Chars []rune
 }
 
 var encodings = []Encoding{

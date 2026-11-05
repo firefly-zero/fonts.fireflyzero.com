@@ -3,6 +3,7 @@ package generator
 import (
 	"cmp"
 	"embed"
+	"encoding/binary"
 	"fmt"
 	"html/template"
 	"image"
@@ -42,7 +43,11 @@ type Font struct {
 }
 
 func Run() error {
-	err := renderEncodingsPage()
+	err := loadEncodings()
+	if err != nil {
+		return err
+	}
+	err = renderEncodingsPage()
 	if err != nil {
 		return err
 	}
@@ -69,6 +74,26 @@ func Run() error {
 	err = renderEncodingPage(encodings[0], fonts)
 	if err != nil {
 		return err
+	}
+	return nil
+}
+
+func loadEncodings() error {
+	for i := range encodings {
+		enc := &encodings[i]
+		if enc.Slug == "ascii" {
+			continue
+		}
+		chars := []rune{}
+		raw, err := os.ReadFile("generator/encodings/" + enc.Slug + ".bin")
+		if err != nil {
+			return err
+		}
+		for i := 0; i < len(raw); i += 4 {
+			ch := rune(binary.BigEndian.Uint32(raw[i : i+4]))
+			chars = append(chars, ch)
+		}
+		enc.Chars = chars
 	}
 	return nil
 }
@@ -126,25 +151,15 @@ func handleBDFFile(fname string) (*Font, error) {
 		return nil, fmt.Errorf("parse BDF font: %v", err)
 	}
 
-	assets := makeAssets(font)
+	assets := makeAssets(encodings[0], font)
 
 	family := getFamily(font)
 	style := getStyle(font)
 	fontName := fmt.Sprintf("%s-%dx%d%s", family, assets.CharW, assets.CharH, style)
 
-	outName := "public/ascii/" + fontName + ".png"
-	_, err = os.Stat(outName)
-	if err == nil {
-		return nil, fmt.Errorf("file already exists: %s", outName)
-	}
-	out, err := os.Create(outName)
+	err = saveAssets(encodings[0], fontName, assets)
 	if err != nil {
-		return nil, fmt.Errorf("open %s on write: %v", outName, err)
-	}
-	defer func() { _ = out.Close() }()
-	err = png.Encode(out, assets.Atlas)
-	if err != nil {
-		return nil, fmt.Errorf("save PNG file: %v", err)
+		return nil, err
 	}
 
 	info := Font{
@@ -157,13 +172,31 @@ func handleBDFFile(fname string) (*Font, error) {
 	return &info, nil
 }
 
+func saveAssets(enc Encoding, fontName string, assets Assets) error {
+	outName := "public/" + enc.Slug + "/" + fontName + ".png"
+	_, err := os.Stat(outName)
+	if err == nil {
+		return fmt.Errorf("file already exists: %s", outName)
+	}
+	out, err := os.Create(outName)
+	if err != nil {
+		return fmt.Errorf("open %s on write: %v", outName, err)
+	}
+	defer func() { _ = out.Close() }()
+	err = png.Encode(out, assets.Atlas)
+	if err != nil {
+		return fmt.Errorf("save PNG file: %v", err)
+	}
+	return nil
+}
+
 type Assets struct {
 	Atlas *image.Alpha
 	CharW int
 	CharH int
 }
 
-func makeAssets(font *bdf.Font) Assets {
+func makeAssets(enc Encoding, font *bdf.Font) Assets {
 	chars := []bdf.Character{}
 	charW := 0
 	charH := 0
@@ -183,10 +216,10 @@ func makeAssets(font *bdf.Font) Assets {
 		charW++
 	}
 
+	// Make atlas: PNG image with every font character in order.
 	imgW := charW*16 + 2
 	imgH := charH*len(chars)/16 + font.Descent + 2
 	img := image.NewAlpha(image.Rect(0, 0, imgW, imgH))
-
 	for i, ch := range chars {
 		src := ch.Alpha
 		ox := max(ch.LowerPoint[0], 0)
@@ -198,6 +231,7 @@ func makeAssets(font *bdf.Font) Assets {
 		)
 		draw.Draw(img, rect, src, src.Rect.Min, draw.Src)
 	}
+
 	return Assets{
 		Atlas: img,
 		CharW: charW,
