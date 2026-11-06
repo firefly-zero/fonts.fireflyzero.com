@@ -67,11 +67,6 @@ var families = map[string]Family{
 		Author:  "Zevv",
 		License: "",
 	},
-	"psevdoazbuka": {
-		Name:    "psevdoazbuka",
-		Author:  "ucw.cz",
-		License: "",
-	},
 	"raccoon": {
 		Name:    "raccoon",
 		Author:  "Raccoon",
