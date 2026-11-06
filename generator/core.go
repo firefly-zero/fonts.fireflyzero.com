@@ -53,6 +53,13 @@ func Run() error {
 	if err != nil {
 		return err
 	}
+	for _, enc := range encodings {
+		dirName := "public/" + enc.Slug
+		err := os.MkdirAll(dirName, os.ModePerm)
+		if err != nil {
+			return fmt.Errorf("create dir: %v", err)
+		}
+	}
 
 	files, err := os.ReadDir("bdf")
 	if err != nil {
@@ -198,11 +205,7 @@ func handleBDFFile(fname string) (*Font, error) {
 
 func saveAssets(enc Encoding, fontName string, assets Assets) error {
 	dirName := "public/" + enc.Slug
-	err := os.MkdirAll(dirName, os.ModePerm)
-	if err != nil {
-		return fmt.Errorf("create dir: %v", err)
-	}
-	err = savePNG(dirName+"/"+fontName+"-atlas.png", assets.Atlas)
+	err := savePNG(dirName+"/"+fontName+"-atlas.png", assets.Atlas)
 	if err != nil {
 		return err
 	}
