@@ -67,6 +67,12 @@ var families = map[string]Family{
 		Author:  "Konstantin Bytensky",
 		License: "",
 	},
+	"leovilok": {
+		Name:    "leovilok",
+		Author:  "lvgx",
+		License: "unlicensed",
+		URL:     "https://github.com/leovilok/fonts",
+	},
 	"mda": {
 		Name:    "mda",
 		Author:  "",
