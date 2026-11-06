@@ -291,7 +291,7 @@ func makeAssets(enc Encoding, font *bdf.Font) *Assets {
 	if charH >= font.BBox.Height-2 {
 		charH = font.BBox.Height
 	}
-	if font.Foundry == "Raccoon" {
+	if font.Foundry == "Raccoon" || strings.HasPrefix(font.FamilyName, "Galmuri") {
 		charW++
 	}
 
@@ -359,6 +359,9 @@ func getFamily(font *bdf.Font) string {
 		return "ibm-437"
 	}
 	name := font.FamilyName
+	if strings.HasPrefix(name, "Galmuri") {
+		return "galmuri"
+	}
 	name = strings.Split(name, " ")[0]
 	name = strings.ToLower(name)
 	if name == "fixed" {

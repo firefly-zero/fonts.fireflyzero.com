@@ -40,6 +40,12 @@ var families = map[string]Family{
 		Author:  "IBM",
 		License: "",
 	},
+	"galmuri": {
+		Name:    "galmuri",
+		Author:  "Lee Minseo",
+		License: "OFL-1.1",
+		URL:     "https://github.com/quiple/galmuri",
+	},
 	"haxor": {
 		Name:    "haxor",
 		Author:  "ucw.cz",
