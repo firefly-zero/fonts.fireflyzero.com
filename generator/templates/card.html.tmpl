@@ -11,7 +11,7 @@
               </a>
             </li>
             <li>
-              <i class="fa-solid fa-up-right-and-down-left-from-center fa-fw" title="size"></i>
+              <i class="fa-solid fa-up-right-and-down-left-from-center fa-fw" title="character dimensions"></i>
               {{ .Width }}x{{ .Height }}
             </li>
             <li>
@@ -44,6 +44,10 @@
                 {{ end }}
                 </li>
             {{ end }}
+            <li>
+              <i class="fa-solid fa-weight-hanging fa-fw" title="file size"></i>
+              {{ .Size }}
+            </li>
           </ul>
           <a
             href="{{.Name}}.fff"

@@ -16,9 +16,9 @@ import (
 type Character struct {
 	Name       string
 	Encoding   rune
-	Advance    [2]int
+	Advance    image.Point
 	Alpha      *image.Alpha
-	LowerPoint [2]int
+	LowerPoint image.Point
 }
 
 type BBox struct {
@@ -278,12 +278,12 @@ func Parse(data []byte) (*Font, error) {
 				f.Characters[char].Encoding = r
 				f.CharMap[r] = &f.Characters[char]
 			case "DWIDTH":
-				f.Characters[char].Advance[0], err = strconv.Atoi(components[1])
+				f.Characters[char].Advance.X, err = strconv.Atoi(components[1])
 				if err != nil {
 					return nil, err
 				}
 
-				f.Characters[char].Advance[1], err = strconv.Atoi(components[2])
+				f.Characters[char].Advance.Y, err = strconv.Atoi(components[2])
 				if err != nil {
 					return nil, err
 				}
@@ -308,8 +308,8 @@ func Parse(data []byte) (*Font, error) {
 					return nil, err
 				}
 
-				f.Characters[char].LowerPoint[0] = lx
-				f.Characters[char].LowerPoint[1] = ly
+				f.Characters[char].LowerPoint.X = lx
+				f.Characters[char].LowerPoint.Y = ly
 
 				f.Characters[char].Alpha = &image.Alpha{
 					Stride: w,
@@ -375,8 +375,8 @@ func (f *Face) Glyph(dot fixed.Point26_6, r rune) (dr image.Rectangle, mask imag
 
 	mask = c.Alpha
 
-	x := int(dot.X)>>6 + c.LowerPoint[0]
-	y := int(dot.Y)>>6 - c.LowerPoint[1]
+	x := int(dot.X)>>6 + c.LowerPoint.X
+	y := int(dot.Y)>>6 - c.LowerPoint.Y
 	dr = image.Rectangle{
 		Min: image.Point{
 			X: x,
@@ -388,7 +388,7 @@ func (f *Face) Glyph(dot fixed.Point26_6, r rune) (dr image.Rectangle, mask imag
 		},
 	}
 
-	return dr, mask, image.Point{Y: 0}, fixed.I(c.Advance[0]), true
+	return dr, mask, image.Point{Y: 0}, fixed.I(c.Advance.X), true
 }
 
 func (f *Face) GlyphBounds(r rune) (bounds fixed.Rectangle26_6, advance fixed.Int26_6, ok bool) {
@@ -397,7 +397,7 @@ func (f *Face) GlyphBounds(r rune) (bounds fixed.Rectangle26_6, advance fixed.In
 		return fixed.R(0, -f.Font.Ascent, 0, +f.Font.Descent), 0, false
 	}
 
-	return fixed.R(c.LowerPoint[0], -f.Font.Ascent, c.LowerPoint[0]+c.Alpha.Rect.Dx(), f.Font.Descent), fixed.I(c.Advance[0]), true
+	return fixed.R(c.LowerPoint.X, -f.Font.Ascent, c.LowerPoint.X+c.Alpha.Rect.Dx(), f.Font.Descent), fixed.I(c.Advance.X), true
 }
 
 func (f *Face) GlyphAdvance(r rune) (advance fixed.Int26_6, ok bool) {
@@ -405,5 +405,5 @@ func (f *Face) GlyphAdvance(r rune) (advance fixed.Int26_6, ok bool) {
 	if c == nil {
 		return 0, false
 	}
-	return fixed.I(c.Advance[0]), true
+	return fixed.I(c.Advance.X), true
 }

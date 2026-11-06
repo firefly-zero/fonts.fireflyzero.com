@@ -8,6 +8,7 @@ import (
 	"image"
 	"image/draw"
 	"image/png"
+	"math"
 	"os"
 	"slices"
 	"strings"
@@ -42,6 +43,7 @@ type Font struct {
 	Style     string
 	Width     int
 	Height    int
+	Size      string
 	Encodings map[string]bool
 }
 
@@ -179,20 +181,32 @@ func handleBDFFile(fname string) (*Font, error) {
 		Style:     style,
 		Width:     assets.CharW,
 		Height:    assets.CharH,
+		Size:      formatSize(len(assets.Firefly)),
 		Encodings: found,
 	}
 	return &info, nil
+}
+
+func formatSize(n int) string {
+	if n < 2048 {
+		return fmt.Sprintf("%d bytes", n)
+	}
+	return fmt.Sprintf("%.0f Kb", math.Round(float64(n/1024)))
 }
 
 func saveAssets(enc Encoding, fontName string, assets Assets) error {
 	dirName := "public/" + enc.Slug
 	err := savePNG(dirName+"/"+fontName+"-atlas.png", assets.Atlas)
 	if err != nil {
-		return err
+		return fmt.Errorf("save atlas: %v", err)
 	}
 	err = savePNG(dirName+"/"+fontName+"-pangram.png", assets.Pangram)
 	if err != nil {
-		return err
+		return fmt.Errorf("save pangram: %v", err)
+	}
+	err = os.WriteFile(dirName+"/"+fontName+".fff", assets.Firefly, os.ModePerm)
+	if err != nil {
+		return fmt.Errorf("save firefly font: %v", err)
 	}
 	return nil
 }
@@ -217,6 +231,7 @@ func savePNG(outPath string, img image.Image) error {
 type Assets struct {
 	Atlas   image.Image
 	Pangram image.Image
+	Firefly []byte
 	CharW   int
 	CharH   int
 }
@@ -275,23 +290,77 @@ func makeAssets(enc Encoding, font *bdf.Font) *Assets {
 		if r != ' ' {
 			drawCharAt(pg, *ch, x, (charH - ch.Alpha.Bounds().Dy()))
 		}
-		x += ch.Advance[0]
+		x += ch.Advance.X
 	}
 
 	return &Assets{
 		Atlas:   img,
 		Pangram: pg.SubImage(image.Rect(0, 0, x, pgH)),
+		Firefly: makeFirefly(enc, chars),
 		CharW:   charW,
 		CharH:   charH,
 	}
 }
 
+// Generate Firefly Zero font.
+func makeFirefly(enc Encoding, chars []bdf.Character) []byte {
+	charW := 0
+	charH := 0
+	for _, ch := range chars {
+		charW = max(charW, ch.Alpha.Rect.Dx())
+		charH = max(charH, ch.Alpha.Rect.Dy())
+	}
+	nChars := len(chars)
+	if nChars%8 != 0 {
+		panic("invalid char count")
+	}
+
+	buf := []byte{
+		0x12,
+		enc.ID,
+		byte(charW),
+		byte(charH),
+	}
+	for _, ch := range chars {
+		buf = append(buf, byte(int8(ch.LowerPoint.X)))
+		buf = append(buf, byte(int8(ch.LowerPoint.Y)))
+		buf = append(buf, byte(ch.Advance.X))
+		buf = append(buf, encodeChar(ch, charW, charH)...)
+	}
+	return buf
+}
+
+func encodeChar(ch bdf.Character, charW, charH int) []byte {
+	buf := make([]byte, 0)
+	dy := charH - ch.Alpha.Rect.Dy()
+	bits := 0
+	var b byte
+	for x := range charW {
+		for y := range charW {
+			b <<= 1
+			if ch.Alpha.AlphaAt(x, y-dy).A != 0 {
+				b |= 1
+			}
+			bits++
+			if bits == 8 {
+				buf = append(buf, b)
+				b = 0
+				bits = 0
+			}
+		}
+	}
+	if bits != 0 {
+		buf = append(buf, b)
+	}
+	return buf
+}
+
 func drawCharAt(img *image.Alpha, ch bdf.Character, x, y int) {
 	src := ch.Alpha
-	ox := max(ch.LowerPoint[0], 0)
+	ox := max(ch.LowerPoint.X, 0)
 	rect := image.Rect(
 		x+ox,
-		y-ch.LowerPoint[1],
+		y-ch.LowerPoint.Y,
 		img.Rect.Dx(),
 		img.Rect.Dy(),
 	)
