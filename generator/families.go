@@ -88,6 +88,12 @@ var families = map[string]Family{
 		License: "BSD 2-Clause",
 		URL:     "https://github.com/fcambus/spleen",
 	},
+	"spleentt": {
+		Name:    "spleentt",
+		Author:  "Tommy Thorn",
+		License: "BSD 2-Clause",
+		URL:     "https://github.com/tommythorn/spleentt-5x8-font",
+	},
 	"tahoma": {
 		Name:    "tahoma",
 		Author:  "The Wine Project",
