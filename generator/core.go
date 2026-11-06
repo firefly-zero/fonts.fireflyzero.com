@@ -1,7 +1,6 @@
 package generator
 
 import (
-	"cmp"
 	"embed"
 	"encoding/binary"
 	"fmt"
@@ -24,6 +23,7 @@ var (
 	tmplTemplates  = map[string]*template.Template{
 		"index":    parseTemplate("index"),
 		"encoding": parseTemplate("encoding"),
+		"family":   parseTemplate("family"),
 	}
 )
 
@@ -102,9 +102,17 @@ func Run() error {
 	// Render HTML pages for the generated fonts.
 	slices.SortFunc(fonts, cmpFonts)
 	for _, enc := range encodings {
-		err = renderEncodingPage(enc, filterFonts(enc, fonts))
+		encFonts := filterEncFonts(enc, fonts)
+		err = renderEncodingPage(enc, encFonts)
 		if err != nil {
 			return err
+		}
+		for _, fam := range families {
+			famFonts := filterFamFonts(fam, encFonts)
+			err = renderFamilyPage(enc, fam, famFonts)
+			if err != nil {
+				return err
+			}
 		}
 	}
 	return nil
@@ -126,54 +134,6 @@ func loadEncodings() error {
 			chars = append(chars, ch)
 		}
 		enc.Chars = chars
-	}
-	return nil
-}
-
-func cmpFonts(a, b Font) int {
-	apx := a.Width * a.Height
-	bpx := b.Width * b.Height
-	if apx != bpx {
-		return cmp.Compare(apx, bpx)
-	}
-	return cmp.Compare(a.Family.Name, b.Family.Name)
-}
-
-func renderEncodingsPage() error {
-	page := "index.html"
-	file, err := os.Create("public/" + page)
-	if err != nil {
-		return fmt.Errorf("create %s: %v", page, err)
-	}
-	defer func() { _ = file.Close() }()
-	err = tmplTemplates["index"].ExecuteTemplate(file, page+".tmpl", encodings)
-	if err != nil {
-		return fmt.Errorf("render %s: %v", page, err)
-	}
-	return nil
-}
-
-func filterFonts(enc Encoding, fonts []Font) []Font {
-	fonts = slices.Clone(fonts)
-	return slices.DeleteFunc(fonts, func(f Font) bool {
-		return !f.Encodings[enc.Slug]
-	})
-}
-
-func renderEncodingPage(enc Encoding, fonts []Font) error {
-	outName := fmt.Sprintf("public/%s/index.html", enc.Slug)
-	file, err := os.Create(outName)
-	if err != nil {
-		return fmt.Errorf("create %s: %v", outName, err)
-	}
-	defer func() { _ = file.Close() }()
-	data := map[string]any{
-		"Encoding": enc,
-		"Fonts":    fonts,
-	}
-	err = tmplTemplates["encoding"].ExecuteTemplate(file, "encoding.html.tmpl", data)
-	if err != nil {
-		return fmt.Errorf("render %s: %v", outName, err)
 	}
 	return nil
 }

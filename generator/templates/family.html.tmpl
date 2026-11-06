@@ -1,0 +1,19 @@
+{{define "title"}}{{.Family.Name}} fonts for Firefly Zero{{end}}
+
+{{define "body"}}
+  <h1 class="text-center">
+    <a href="https://fireflyzero.com/" target="_blank">Firefly Zero</a>
+    / <a href="..">Fonts</a>
+    / <a href="index.html">{{.Encoding.Emoji}} {{.Encoding.Title}}</a>
+    / {{.Family.Name}}
+  </h1>
+  <div class="row row-cols-1 row-cols-md-2 g-1">
+    {{range .Fonts}}
+      <div class="col">
+        {{template "card" .}}
+      </div>
+    {{end}}
+  </div>
+{{end}}
+
+{{template "base" .}}
