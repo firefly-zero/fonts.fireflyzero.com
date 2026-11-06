@@ -84,13 +84,14 @@ var families = map[string]Family{
 	},
 	"tahoma": {
 		Name:    "tahoma",
-		Author:  "Larry Snyder",
-		License: "",
+		Author:  "The Wine Project",
+		License: "LGPL 2.1",
+		URL:     "https://gitlab.winehq.org/wine/wine",
 	},
 	"tom-thumb": {
 		Name:    "tom-thumb",
 		Author:  "Raccoon",
-		License: "MIT",
+		License: "CC0",
 		URL:     "https://robey.lag.net/2010/01/23/tiny-monospace-font.html",
 	},
 	"ucs": {
@@ -106,7 +107,8 @@ var families = map[string]Family{
 	},
 	"zx": {
 		Name:    "zx-spectrum",
-		Author:  "",
-		License: "",
+		Author:  "Amstrad plc",
+		License: "proprietary",
+		URL:     "https://github.com/ha1tch/bdf-fonts/blob/main/sinclair/SINCLAIR.txt",
 	},
 }
