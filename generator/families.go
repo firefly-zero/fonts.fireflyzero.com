@@ -78,6 +78,12 @@ var families = map[string]Family{
 		Author:  "",
 		License: "",
 	},
+	"monomacs": {
+		Name:    "monomacs",
+		Author:  "Bradley Jones",
+		License: "OFL-1.1",
+		URL:     "https://github.com/brdjns-zz/monomacs",
+	},
 	"peep": {
 		Name:    "peep",
 		Author:  "Zevv",
