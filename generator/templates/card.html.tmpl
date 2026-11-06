@@ -33,8 +33,14 @@
             {{ if .Family.License }}
               <li>
                 <i class="fa-solid fa-scale-balanced fa-fw" title="license"></i>
-                {{ .Family.License }}
-              </li>
+                {{ if .Family.URL }}
+                  <a href="{{ .Family.URL }}" target="_blank">
+                    {{ .Family.License }}
+                  </a>
+                {{ else }}
+                  {{ .Family.License }}
+                {{ end }}
+                </li>
             {{ end }}
           </ul>
           <a

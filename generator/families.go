@@ -4,6 +4,7 @@ type Family struct {
 	Name    string
 	Author  string
 	License string
+	URL     string
 }
 
 var families = map[string]Family{
@@ -24,13 +25,15 @@ var families = map[string]Family{
 	},
 	"cozette": {
 		Name:    "cozette",
-		Author:  "Slavfox",
-		License: "",
+		Author:  "Ines",
+		License: "MIT",
+		URL:     "https://github.com/the-moonwitch/Cozette",
 	},
 	"creep": {
 		Name:    "creep",
 		Author:  "romeovs",
-		License: "",
+		License: "MIT",
+		URL:     "https://github.com/romeovs/creep",
 	},
 	"ega": {
 		Name:    "ega",
@@ -40,7 +43,8 @@ var families = map[string]Family{
 	"haxor": {
 		Name:    "haxor",
 		Author:  "ucw.cz",
-		License: "",
+		License: "GPLv2+",
+		URL:     "https://github.com/metan-ucw/fonts",
 	},
 	"helvetica": {
 		Name:    "helvetica",
@@ -67,11 +71,6 @@ var families = map[string]Family{
 		Author:  "Zevv",
 		License: "",
 	},
-	"raccoon": {
-		Name:    "raccoon",
-		Author:  "Raccoon",
-		License: "",
-	},
 	"scientifica": {
 		Name:    "scientifica",
 		Author:  "romeovs",
@@ -81,16 +80,24 @@ var families = map[string]Family{
 		Name:    "spleen",
 		Author:  "Frederic Cambus",
 		License: "BSD 2-Clause",
+		URL:     "https://github.com/fcambus/spleen",
 	},
 	"tahoma": {
 		Name:    "tahoma",
 		Author:  "Larry Snyder",
 		License: "",
 	},
+	"tom-thumb": {
+		Name:    "tom-thumb",
+		Author:  "Raccoon",
+		License: "MIT",
+		URL:     "https://robey.lag.net/2010/01/23/tiny-monospace-font.html",
+	},
 	"ucs": {
 		Name:    "ucs",
 		Author:  "",
 		License: "public domain",
+		URL:     "https://www.cl.cam.ac.uk/~mgk25/ucs-fonts.html",
 	},
 	"vga": {
 		Name:    "vga",
@@ -98,8 +105,8 @@ var families = map[string]Family{
 		License: "",
 	},
 	"zx": {
-		Name:    "zx",
-		Author:  "Sinclair",
+		Name:    "zx-spectrum",
+		Author:  "",
 		License: "",
 	},
 }

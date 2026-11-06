@@ -312,7 +312,9 @@ func makeAssets(enc Encoding, font *bdf.Font) *Assets {
 	x := 2
 	for _, r := range enc.Pangram {
 		ch := getChar(font, r)
-		drawCharAt(pg, *ch, x, (charH - ch.Alpha.Bounds().Dy()))
+		if r != ' ' {
+			drawCharAt(pg, *ch, x, (charH - ch.Alpha.Bounds().Dy()))
+		}
 		x += ch.Advance[0]
 	}
 
@@ -363,7 +365,7 @@ func getFamily(font *bdf.Font) string {
 		name = "ucs"
 	}
 	if name == "fixed4x6" {
-		name = "raccoon"
+		name = "tom-thumb"
 	}
 	return name
 }
