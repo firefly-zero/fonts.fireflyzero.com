@@ -15,6 +15,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/firefly-zero/fonts.fireflyzero.com/generator/bdf"
+	"golang.org/x/sync/errgroup"
 )
 
 var (
@@ -65,21 +66,41 @@ func Run() error {
 	if err != nil {
 		return fmt.Errorf("open bdf dir: %v", err)
 	}
-	fonts := make([]Font, 0, len(files))
+
+	// Spawn background task for each font.
+	fontsChan := make(chan Font)
+	group := &errgroup.Group{}
 	for _, file := range files {
 		name := file.Name()
 		if name == "HaxorNarrow-17.bdf" {
 			continue
 		}
-		font, err := handleBDFFile("bdf/" + name)
-		if err != nil {
-			return err
-		}
-		fonts = append(fonts, *font)
+		group.Go(func() error {
+			font, err := handleBDFFile("bdf/" + name)
+			if err != nil {
+				return err
+			}
+			fontsChan <- *font
+			return nil
+		})
 	}
 
-	slices.SortFunc(fonts, cmpFonts)
+	// Collect result of all tasks.
+	var groupErr error
+	go func() {
+		groupErr = group.Wait()
+		close(fontsChan)
+	}()
+	fonts := make([]Font, 0, len(files))
+	for font := range fontsChan {
+		fonts = append(fonts, font)
+	}
+	if groupErr != nil {
+		return groupErr
+	}
 
+	// Render HTML pages for the generated fonts.
+	slices.SortFunc(fonts, cmpFonts)
 	for _, enc := range encodings {
 		err = renderEncodingPage(enc, filterFonts(enc, fonts))
 		if err != nil {
