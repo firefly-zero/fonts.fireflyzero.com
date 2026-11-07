@@ -13,6 +13,12 @@ var families = map[string]Family{
 		Author:  "IBM",
 		License: "",
 	},
+	"bitocra": {
+		Name:    "bitocra",
+		Author:  "Aaron Christianson",
+		License: "OFL-1.1",
+		URL:     "https://github.com/ninjaaron/bitocra",
+	},
 	"cga": {
 		Name:    "cga",
 		Author:  "IBM",

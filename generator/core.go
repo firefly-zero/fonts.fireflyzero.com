@@ -430,6 +430,9 @@ func getFamily(font *bdf.Font) string {
 	if strings.HasPrefix(name, "Galmuri") {
 		return "galmuri"
 	}
+	if font.Foundry == "aaron" {
+		return "bitocra"
+	}
 	name = strings.Split(name, " ")[0]
 	name = strings.ToLower(name)
 	if name == "fixed" {
