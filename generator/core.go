@@ -246,6 +246,7 @@ func makeAssets(enc Encoding, font *bdf.Font) *Assets {
 		charW = max(charW, ch.Alpha.Rect.Dx())
 		charH = max(charH, ch.Alpha.Rect.Dy())
 	}
+	badChar := chars[len(chars)-1]
 	nFound := 0
 	for _, r := range enc.Chars {
 		ch := getChar(font, r)
@@ -286,11 +287,12 @@ func makeAssets(enc Encoding, font *bdf.Font) *Assets {
 	pg := image.NewAlpha(image.Rect(0, 0, pgW, pgH))
 	x := 2
 	for _, r := range enc.Pangram {
-		ch := getChar(font, r)
-		if r != ' ' {
-			drawCharAt(pg, *ch, x, (charH - ch.Alpha.Bounds().Dy()))
+		ch := getCharFrom(chars, r)
+		if ch == nil {
+			ch = &badChar
 		}
-		x += ch.Advance.X
+		drawCharAt(pg, *ch, x, (charH - ch.Alpha.Bounds().Dy()))
+		x += charW
 	}
 
 	return &Assets{
@@ -395,6 +397,15 @@ func getChar(font *bdf.Font, r rune) *bdf.Character {
 		return ch
 	}
 	panic("character not found")
+}
+
+func getCharFrom(chars []bdf.Character, r rune) *bdf.Character {
+	for _, ch := range chars {
+		if ch.Encoding == r {
+			return &ch
+		}
+	}
+	return nil
 }
 
 func getFamily(font *bdf.Font) string {
