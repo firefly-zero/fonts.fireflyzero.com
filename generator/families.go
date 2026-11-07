@@ -19,6 +19,12 @@ var families = map[string]Family{
 		License: "OFL-1.1",
 		URL:     "https://github.com/ninjaaron/bitocra",
 	},
+	"cherry": {
+		Name:    "cherry",
+		Author:  "camille",
+		License: "0BSD",
+		URL:     "https://github.com/turquoise-hexagon/cherry",
+	},
 	"cga": {
 		Name:    "cga",
 		Author:  "IBM",
