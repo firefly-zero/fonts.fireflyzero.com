@@ -388,7 +388,21 @@ func getChar(font *bdf.Font, r rune) *bdf.Character {
 	if ch != nil {
 		return ch
 	}
-	ch = font.CharMap[font.DefaultChar]
+
+	// Some encodings (Tahoma variants) are missing a space character.
+	// FOr such encodings, we can create it as an empty space with dimensions of "?".
+	if r == ' ' {
+		ch := font.CharMap['?']
+		return &bdf.Character{
+			Name:       "space",
+			Encoding:   ' ',
+			Advance:    ch.Advance,
+			Alpha:      image.NewAlpha(ch.Alpha.Rect),
+			LowerPoint: ch.LowerPoint,
+		}
+	}
+
+	ch = font.CharMap[0x7f]
 	if ch != nil {
 		return ch
 	}
