@@ -335,8 +335,8 @@ func encodeChar(ch bdf.Character, charW, charH int) []byte {
 	dy := charH - ch.Alpha.Rect.Dy()
 	bits := 0
 	var b byte
-	for x := range charW {
-		for y := range charW {
+	for y := range charH {
+		for x := range charW {
 			b <<= 1
 			if ch.Alpha.AlphaAt(x, y-dy).A != 0 {
 				b |= 1
@@ -350,9 +350,24 @@ func encodeChar(ch bdf.Character, charW, charH int) []byte {
 		}
 	}
 	if bits != 0 {
+		b <<= 8 - bits
 		buf = append(buf, b)
 	}
+
+	expSize := divCeil(charW*charH, 8)
+	if len(buf) != expSize {
+		panic(fmt.Sprintf("%d != %d (%dx%d bits)", len(buf), expSize, charW, charH))
+	}
 	return buf
+}
+
+func divCeil(lhs, rhs int) int {
+	d := lhs / rhs
+	r := lhs % rhs
+	if r > 0 {
+		return d + 1
+	}
+	return d
 }
 
 func drawCharAt(img *image.Alpha, ch bdf.Character, x, y int) {
