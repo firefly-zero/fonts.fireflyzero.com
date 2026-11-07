@@ -44,6 +44,8 @@ type Font struct {
 	Width     int
 	Height    int
 	Size      string
+	AtlasW    int
+	AtlasH    int
 	Encodings map[string]bool
 }
 
@@ -182,6 +184,8 @@ func handleBDFFile(fname string) (*Font, error) {
 		Width:     assets.CharW,
 		Height:    assets.CharH,
 		Size:      formatSize(len(assets.Firefly)),
+		AtlasW:    assets.Atlas.Bounds().Dx(),
+		AtlasH:    assets.Atlas.Bounds().Dy(),
 		Encodings: found,
 	}
 	return &info, nil
