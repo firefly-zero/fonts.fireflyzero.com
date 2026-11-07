@@ -62,6 +62,12 @@ var families = map[string]Family{
 		Author:  "IBM",
 		License: "",
 	},
+	"kenney": {
+		Name:    "kenney",
+		Author:  "kenney.nl",
+		License: "CC0",
+		URL:     "https://kenney.nl/assets/kenney-fonts",
+	},
 	"knxt": {
 		Name:    "knxt",
 		Author:  "Konstantin Bytensky",
