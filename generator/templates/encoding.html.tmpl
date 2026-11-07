@@ -4,11 +4,65 @@
   <h1 class="text-center">
     <a href="https://fireflyzero.com/" target="_blank">Firefly Zero</a> / <a href="..">Fonts</a> / {{.Encoding.Emoji}} {{.Encoding.Title}}
   </h1>
+
+  <div class="row">
+    <div class="col col-2">
+      <label for="min-w-input" class="form-label">
+        minimum width
+        (<output for="min-w-input" id="min-w-output" aria-hidden="true"></output>)
+      </label>
+    </div>
+    <div class="col col-10">
+      <input type="range" class="form-range" min=4 max=32 value=4 step=1 id="min-w-input">
+    </div>
+
+    <div class="col col-2">
+      <label for="max-w-input" class="form-label">
+        maximum width
+        (<output for="max-w-input" id="max-w-output" aria-hidden="true"></output>)
+      </label>
+    </div>
+    <div class="col col-10">
+      <input type="range" class="form-range" min=4 max=32 value=32 step=1 id="max-w-input">
+    </div>
+
+    <script>
+      const minWIn = document.getElementById('min-w-input');
+      const minWOut = document.getElementById('min-w-output');
+      minWOut.textContent = minWIn.value;
+
+      const maxWIn = document.getElementById('max-w-input');
+      const maxWOut = document.getElementById('max-w-output');
+      maxWOut.textContent = maxWIn.value;
+
+      function updateList() {
+        const minW = minWIn.value;
+        minWOut.textContent = minW;
+        const maxW = maxWIn.value;
+        maxWOut.textContent = maxW;
+        const fonts = document.getElementsByTagName('article');
+        for (let i = 0; i < fonts.length; i++) {
+          const font = fonts[i];
+          const gt  = Number(font.dataset.charw) >= Number(minW);
+          const lt  = Number(font.dataset.charw) <= Number(maxW);
+          if (gt && lt) {
+            font.style.display = "";
+          } else {
+            font.style.display = "none";
+          }
+        }
+      }
+
+      minWIn.addEventListener('input', updateList);
+      maxWIn.addEventListener('input', updateList);
+    </script>
+  </div>
+
   <div class="row row-cols-1 row-cols-md-2 g-1">
     {{range .Fonts}}
-      <div class="col">
+      <article class="col" data-charw="{{.Width}}">
         {{template "card" .}}
-      </div>
+      </article>
     {{end}}
   </div>
 {{end}}

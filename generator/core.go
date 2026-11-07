@@ -261,7 +261,7 @@ func makeAssets(enc Encoding, font *bdf.Font) *Assets {
 		charW = max(charW, ch.Alpha.Rect.Dx())
 		charH = max(charH, ch.Alpha.Rect.Dy())
 	}
-	if len(enc.Chars) > 10 && float32(nFound)/float32(len(enc.Chars)) < .5 {
+	if len(enc.Chars) > 10 && float32(nFound)/float32(len(enc.Chars)) < .7 {
 		return nil
 	}
 
