@@ -124,6 +124,12 @@ var families = map[string]Family{
 		License: "public domain",
 		URL:     "https://www.cl.cam.ac.uk/~mgk25/ucs-fonts.html",
 	},
+	"unifontex": {
+		Name:    "unifontex",
+		Author:  "stgiga",
+		License: "GPL-2.0",
+		URL:     "https://github.com/stgiga/UnifontEX",
+	},
 	"vga": {
 		Name:    "vga",
 		Author:  "IBM",

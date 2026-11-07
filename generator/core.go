@@ -372,9 +372,8 @@ func divCeil(lhs, rhs int) int {
 
 func drawCharAt(img *image.Alpha, ch bdf.Character, x, y int) {
 	src := ch.Alpha
-	ox := max(ch.LowerPoint.X, 0)
 	rect := image.Rect(
-		x+ox,
+		x+ch.LowerPoint.X,
 		y-ch.LowerPoint.Y,
 		img.Rect.Dx(),
 		img.Rect.Dy(),
@@ -413,6 +412,9 @@ func getFamily(font *bdf.Font) string {
 	}
 	if name == "fixed4x6" {
 		name = "tom-thumb"
+	}
+	if name == "unifontexmono" {
+		name = "unifontex"
 	}
 	return name
 }
