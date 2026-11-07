@@ -118,6 +118,12 @@ var families = map[string]Family{
 		License: "LGPL 2.1",
 		URL:     "https://gitlab.winehq.org/wine/wine",
 	},
+	"terminus": {
+		Name:    "terminus",
+		Author:  "Dimitar Zhekov",
+		License: "OFL-1.1",
+		URL:     "https://sourceforge.net/projects/terminus-font/",
+	},
 	"tom-thumb": {
 		Name:    "tom-thumb",
 		Author:  "Raccoon",
